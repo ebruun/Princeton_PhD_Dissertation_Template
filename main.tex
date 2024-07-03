@@ -1,0 +1,71 @@
+%!TEX TS-program = xelatex 
+%!TEX encoding = UTF-8 Unicode
+
+%%==================================%%
+%% Some notes
+%%==================================%%
+% font shape warnings have to do with times new roman font, doesn't really affect anything so didn't fix
+% `TU/ppl/b/n' undefined, due to bold in the fancy chapter headings
+% `TU/TimesNewRoman(0)/m/sc' undefined, has to do with "small caps" formatting in algorithm env
+
+
+\documentclass[School=Princeton]{PrincetonDissertate}
+
+%%==================================%%
+%% PATHS TO FILES (specific folder specified at the start of each chapter)
+%%==================================%%
+
+% \newcommand{\figurefolder}{figures\_highres} %unreduced file size (massive file)
+\newcommand{\figurefolder}{figures\_mediumres} %figure sizes for submitted dissertation
+% \newcommand{\figurefolder}{figures\_lowres} %for writing and compiling, ~1% size of highres
+
+% Custom paths (as needed)
+\newcommand*{\ChapterPath}{./chapters}%
+\newcommand*{\AppendixPath}{./appendices}%
+\newcommand*{\BiblioPath}{../bibliography} % ../ since it is accessed from within "chapters" folder
+\newcommand*{\FrontMatterPath}{./frontmatter}%
+
+
+%%==================================%%
+%% DOCUMENT FRONT MATTER
+%%==================================%%
+\begin{document}
+
+\input{\FrontMatterPath/frontpage}
+\input{\FrontMatterPath/abstract}
+\input{\FrontMatterPath/acknowledgements}
+\input{\FrontMatterPath/dedication}
+
+\maketitle
+\copyrightpage
+\abstractpage
+\acknowledgmentspage
+\dedicationpage
+
+\frontmatter
+
+%%==================================%%
+%% CONTENT
+%%==================================%%
+\renewcommand{\chapterheadstartvskip}{\vspace*{-5\baselineskip}} %move only the chapters titles up the page
+\include{\ChapterPath/1Introduction}
+\include{\ChapterPath/2ResearchContext}
+\include{\ChapterPath/3HumanRobot}
+\include{\ChapterPath/4LightVault}
+\include{\ChapterPath/5SpaceFrame}
+\include{\ChapterPath/6ZeroWaste}
+\include{\ChapterPath/7Conclusion}
+
+
+%%==================================%%
+%% APPENDIX
+%%==================================%%
+\addappheadtotoc %adds an appendix chapter title to TOC
+
+\begin{appendices}
+   \input{\AppendixPath/4LightVault_appendix} %use 'input' instead of 'include' to fix bug with TOC
+   \include{\AppendixPath/5SpaceFrame_appendix}
+   \include{\AppendixPath/6ZeroWaste_appendix}
+\end{appendices}
+
+\end{document}
