@@ -1,0 +1,954 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LIGHTVAULT
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\graphicspath{{./\figurefolder/4LightVault/}}
+
+% ----------------------------------------------------------------------------------------------------
+% 0. Front Matter
+% ----------------------------------------------------------------------------------------------------
+\chapter{Three Cooperative Robotic Fabrication Methods for the Scaffold-Free Construction of a Masonry Arch} \label{chap:4_LightVault}
+
+\thispagestyle{empty}
+
+\vfill 
+\section*{\normalsize\textmd{This chapter is based on the following publication(s):}}
+    \vspace{-0.3cm}
+    \textbf{Bruun, E. P. G.}, Pastrana, R., Paris, V., Beghini, A., Pizzigoni, A., Parascho, S., \& Adriaenssens, S. (2021). Three cooperative robotic fabrication methods for the scaffold-free construction of a masonry arch. Automation in Construction, 129, 103803. \\ https://doi.org/10.1016/j.autcon.2021.103803
+
+
+\section*{\normalsize\textmd{Contributor roles in publication:}}
+    \vspace{-0.3cm}\noindent
+    - Bruun: Conceptualization, Methodology, Software, Validation, Investigation, Writing (Original Draft), Writing (Review and Editing), Visualization\\
+    - Pastrana \& Paris: Conceptualization, Validation, Writing (Original Draft), Visualization \\
+    - Beghini \& Pizzigoni: Writing (Review and Editing) \\
+    - Parascho: Conceptualization, Resources, Writing (Review and Editing), Supervision, Project Administration\\
+    - Adriaenssens:  Conceptualization, Writing (Review and Editing), Supervision, Funding\\
+
+
+% \section*{\normalsize\textmd{Acknowledgements:}}
+%     \vspace{-0.3cm}
+%     This research was partially developed as part of the Anatomy of Structure Exhibit held in 2020 at the Ambika P3 Gallery in London in collaboration with Skidmore, Owings \& Merrill (SOM).
+
+
+    \newpage
+    \begin{figure}[ht]
+        \centering
+        \includegraphics [trim={0cm 0cm 0cm 0cm},clip,width=0.90\textwidth]{_cover_lightvault}
+        \caption{A glass-brick masonry vault assembled with two cooperating robots.}
+        \label{fig:chapter4_title}
+    \end{figure} 
+
+\section*{Abstract}
+    Geometrically complex masonry structures are traditionally built with scaffolding or falsework to provide stability during construction. The process of building such structures can be improved through the use of multiple robots working together in a cooperative assembly framework. Here a robot is envisioned as both a placement and external support agent during fabrication -- the unfinished structure is supported in such a way that scaffolding is not required. The research in this chapter validates the efficacy of three cooperative fabrication approaches using two or three robots, for the scaffold-free construction of a stable masonry arch from which a medium-span vault is built (as shown in \cref{fig:chapter4_title}). A simplified numerical method to represent a masonry structure is first presented and validated to analyse systems composed of discrete volumetric elements. This method is then used to evaluate the effect of the three cooperative robotic fabrication strategies on the stability performance of an arch. The \textit{sequential method} and \textit{cantilever method}, which utilize two robotic arms, are shown to be viable methods, but have challenges related to scalability and robustness. By adding a third robotic agent, it becomes possible to determine a structurally optimal fabrication sequence through a multi-objective optimization process. The \textit{optimized three robot method} is shown to improve the structural behavior over all fabrication steps.
+
+
+
+% ----------------------------------------------------------------------------------------------------
+% 1. Introduction
+% ----------------------------------------------------------------------------------------------------
+\newpage
+\section{Introduction}\label{intro}
+A self-supporting construction process is one where no external support (e.g., temporary scaffolding or formwork) is required for the structure to remain stable as it is being built. The terms self-supporting \cite{deuss_assembling_2014} or self-balancing \cite{paris_statics_2020} are used interchangeably in the literature -- self-supporting is used herein to describe this structural behavior. Such methods have been used throughout history to build large-scale complex masonry structures, relying on both the brick tessellation pattern and a careful design of the overall form to guarantee stability at all phases \cite{choisy_art_1883, el-naggar_les_1999, besenval_technologie_1984, heyman_stone_1997, pizzigoni_brunelleschis_2015, pizzigoni_herringbone_2018, ochsendorf_guastavino_2010}. Although the contemporary building industry has generally moved away from many of these traditional methods, recently there has been a resurgence of interest on the investigation of self-supporting construction methods \cite{vouga_design_2012, deuss_assembling_2014, goessens_feasibility_2018, som_bricks_2019, paris_statics_2020, loing_free-form_2020, drew_lock-block_2021}. The emergence of automation, pre-fabrication, computational design, and robotic construction has created an opportunity to re-imagine how self-supporting construction techniques can find new relevance today \cite{wu_robotic_2018}.
+
+In striving to develop self-supporting construction methods for masonry construction, a robot becomes more than just a fabrication tool, but is central to shaping what type of structure is feasible to build --  informing the fabrication process through a Robot Oriented Design (ROD) framework \cite{bock_robot-oriented_2015}. Due to their task-versatility \cite{bravo-palacios_one_2020} and spatial precision \cite{eversmann_robotic_2017}, standardized industrial robotic arms have seen continuing widespread growth in industry adoption over the last decade \cite{ifr_world_2018}. Their application is improved by virtue of being able to perform a wide range of functions when paired with customized end-effectors designed for versatility \cite{han_concept_2020}. In a cooperative robotic fabrication (CRF) context (i.e., multiple robots working together), robots with a gripping functionality can take turns performing either the function of picking up and aggregating structural components, or holding and providing temporary support over indefinite periods of time to a partially completed structure \cite{parascho_robotic_2020, parascho_lightvault_2021, parascho_cooperative_2017}. Therefore, when properly sequenced, a cooperative fabrication method has the potential to achieve complex structural goals -- such as building a discrete element structure without temporary scaffolding while maintaining appropriate structural behavior.
+
+Developing such fabrication-informed construction sequences presents a departure from a traditional structural engineering workflow, which places emphasis on the design of the finished structure \cite{sharif_bim_2015}. While this final state is conceivably optimized for a certain structural behaviour or load combination, the construction sequencing and intermediate form required to reach this finished state is seldom optimized. But designing and optimizing a fabrication strategy around the goal of self-support is computationally intensive as all intermediate steps in the construction process need to be evaluated for structural performance -- for the construction of a masonry system this can mean potentially evaluating the placement of 100's of bricks. Thus the goal of this chapter is twofold: (1) to develop, validate, and apply a computationally efficient framework for a high-level structural analysis of discrete element assemblies, (2) to apply the framework to validate the viability of three different cooperative robotic approaches used for to the scaffold-free construction of the central arch, which is part of a complex curved masonry vault.
+
+\subsection{Summary of Contents}
+The chapter starts in \Cref{sec:2_lit_review} with a brief review of literature on the topic of automation in masonry construction, cooperative robotic fabrication for discrete element structures, and modeling approaches for such structures. \Cref{mod_approach} provides a description of the masonry vault prototype referred to in this chapter, and the development and calibration of a simplified modeling approach used to represent it. In \Cref{sec: fab_strategies_2rob,,sec: fab_strategies_3rob}, three cooperative robotic methods are analyzed in the context of the scaffold-free construction: \textit{sequential method}, \textit{cantilever method}, and the \textit{optimized three robot method}. The chapter concludes in \Cref{conclusion} with a discussion of the results from applying these methods and a summary of the main contributions of this research.
+
+
+% ----------------------------------------------------------------------------------------------------
+% 1. Literature Review
+% ----------------------------------------------------------------------------------------------------
+\section{Review of Robotic Fabrication and Masonry Structures}\label{sec:2_lit_review}
+In the context of the Architecture, Engineering and Construction (AEC) field, robotic manufacturing was first applied at a significant scale to the prefabrication of modular homes in Japan in the 1970s \cite{bock_construction_2007, bock_future_2015} and proliferated in numerous specialized applications in that country over the next decade \cite{albus_trip_1986, cousineau_construction_1998, huang_factor_1990, ueno_construction_1986}. The industry has experienced increasing adoption through technological improvements to automation and as a robot's ability to work in unstructured site environments has improved \cite{bock_site_2016, skibniewski_robotics_1989}. Continuing future growth in adoption is motivated by numerous advantages to the construction industry: substantially improving productivity for complex structures  \cite{davila_delgado_robotics_2019}, improving worker safety \cite{castro-lacouture_construction_2009}, and reducing material and labour costs \cite{garcia_de_soto_productivity_2018, kumar_robotics_2016}.
+
+\subsection{On-site Automated Bricklaying in Industry}\label{sec:2_automated_brick}
+While construction robotics has seen a growth in application for off-site prefabrication \cite{bock_robotic_2015}, adoption has lagged for certain complex structural forms or material systems that are typically assembled on-site (e.g., stone/brick masonry \cite{block_structural_2018, rippmann_computational_2016, davis_innovative_2012, borne_droneport_2016} or cast-in-place concrete shells \cite{chilton_heinz_2010, chilton_rooted_2017}). Although Single Task Construction Robots (STCRs) \cite{bock_construction_2016} can be developed for specialized on-site applications, these are generally less common and harder to implement as they are motivated by project-specific economic factors \cite{bock_site_2016}.
+
+Discrete element assemblies, such as masonry structures, are favourable candidates for robotic automation as they are physically taxing to construct manually \cite{vink_physical_2002, hess_ergonomic_2010}. The construction of masonry structures is also highly repetitive and individual units are relatively lightweight, which makes such structures fit for development around an automated framework \cite{dakhli_robotic_2017}. While robotic prefabrication of masonry in the factory setting is possible, the output is geometrically limited to highly standardized vertical block walls due to fixed space and equipment design constraints \cite{bock_robotic_2015}. Thus, automation in masonry construction is generally better suited to in-situ fabrication approaches as a means to better address site variability or construct more complex geometry. The technical exploration of automated in-situ masonry construction dates back to the beginning of the 20th century, with a patent for an automated brick-laying machine submitted in 1904 \cite{thomson_brick-laying_1904}. A functioning automated linear bricklaying machine prototype was documented on-site in the 1960s \cite{british_pathe_mechanical_1967}. But it was first in the late 1980s that developments in the automation of in-situ masonry construction started to flourish \cite{malinovsky_robotic_1990, chamberlain_progress_1991, altobelli_prototype_1993}, from balancer and handling assistance machines \cite{bock_robotic_2015}, to Selective Compliance Articulated Robot Arm (SCARA) systems such as the Solid Material Assembly System (SMAS) \cite{bock_early_2009, kodama_robotized_1988}, the Robotic Construction System for Computer Aided Construction (ROCCO) \cite{bock_robot-oriented_2015, andres_first_1994}, and the Blockbot \cite{slocum_blockbot_1988, lehtinen_outlines_1989}. Recent years have seen further commercial developments in the form of the Semi-Automated Mason (SAM100) \cite{podkaminer_sam100_2021} and Hadrian X robot \cite{pivac_hadrian_2021}, which can be thought of as technical successors to the previously developed articulated robotic arm systems \cite{pritschow_mobile_1994, pritschow_technological_1996}. SAM100 consists of a robotic arm mounted on a track, while Hadrian X uses a custom gripper mounted on a mobile truck crane for improved reachability \cite{dakhli_robotic_2017, sklar_robots_2015}.
+
+
+\subsection{Digital Fabrication and Geometric Complexity}\label{sec:2_dfab} 
+The automated brick-laying systems summarized in \Cref{sec:2_automated_brick} were focused on industry applications for the construction of straight walls and generally improving construction productivity. But only in the last two decades has the field of digital fabrication (DFab) been seriously applied in an academic context to construction at the large-scale with the specific intention of expanding the geometric design space through the use of robots \cite{gramazio_digital_2008, gramazio_made_2014}. The first such project saw stationary industrial robots used to stack bricks to build prefabricated load-bearing but non-standardised undulating walls \cite{bonwetsch_informed_2006, bonwetsch_digitally_2007, kohler_gantenbein_2014}. Later the DFAB house \cite{empa_dfab_2021} became the showcase for how different non-standardized components in a building can be shaped through digital design and robotic fabrication process \cite{willmann_robotic_2016, hack_mesh_2017, hack_structural_2020}.  In the context of masonry construction, the development of specialized digital design software \cite{bonwetsch_brickdesign_2012, mele_compas_2017} and augmented reality frameworks \cite{jahn_holographic_2018, jahn_holographic_2019, mitterberger_augmented_2020} have allowed for more geometrically complex geometries to be materialized on site. Industrial robotic arms have also been been applied in complex setups, for example on gantry cranes \cite{piskorec_brick_2018} and as mobile platforms \cite{dorfler_mobile_2016, giftthaler_mobile_2017}.
+
+
+\subsection{Cooperative Robotics and Discrete Element Structures} \label{sec:lit_discrete}
+Despite the technical advances associated with the DFab movement, robotic fabrication is still rarely utilized beyond the construction of vertical layer-based structures \cite{bartschi_wiggled_2010, kohler_programmed_2014}. Structural stability and the detrimental effect of tensile forces in cantilevered or spanning forms are reasons why masonry robotic brick fabrication projects have been limited to vertical assemblies. Similar challenges are faced in additive concrete manufacturing, which draws inspiration from self-supporting masonry approaches as a means to develop more robust methods for 3D printing overhanging geometry \cite{carneau_exploration_2019, carneau_additive_2020, motamedi_supportless_2019}.
+
+Recent work has suggested that cooperative fabrication can be a means to address issues surrounding stability during construction and to therefore realize complex structural forms that would not be possible otherwise. An example of this is the assembly of metal rods into complex (i.e. non-uniform) space frame structures \cite{parascho_cooperative_2017, parascho_cooperative_2019} where complex joints between rods had to be carefully sequenced using two robots. Or in the fabrication of custom non-planar timber modules where cooperating robots were used to minimize the need for scaffolding \cite{thoma_robotic_2018}. Another example is the construction of a small-scale branching structure, where two robots would take turns supporting the structure as it was being assembled \cite{bruun_humanrobot_2020}. While operating at different scales, these projects all explore the potential of creating a construction sequence where two robots work together cooperatively to assemble a geometrically complex discrete element structure. 
+
+\subsection{Analysis and Modeling of Masonry Structures}\label{sec:2_analysis}
+A number of modeling strategies exist to analyze the structural behavior of three-dimensional masonry structures. As recently surveyed in \cite{sarhosis_review_2016,daltri_modeling_2020, fang_assessing_2019}, finite element (FE), discrete element (DE), and geometric approaches are all feasible. In a FE setting, a continuum mesh of shell elements are calibrated to approximate the macro-behaviour of a masonry structure \cite{kaminski_tests_2010, sarhosis_review_2016}. The interaction between masonry elements and joint interfaces is homogenized. Meanwhile, DE strategies are able to accurately capture in- and out-of-plane behavior \cite{pulatsu_-plane_2019, pulatsu_comparison_2019}, for varied types of geometry \cite{mcinerney_discrete_2015, foti_dem_2018}, at both global- and local-scales \cite{thavalingam_computational_2001,simon_discrete_2016, cundall_formulation_1988, hart_formulation_1988} by representing a masonry structure as a system of three-dimensional rigid or deformable bodies. As shown in the literature \cite{roberti_distinct_1998, kassotakis_discrete_2017, meriggi_distinct_2019, michiels_comparison_2017}, DE approaches are particularly suitable to highlight the detailed structural phenomena that occur between masonry elements and their joint interfaces, such as detachment, collision and sliding. While commercial software packages exist to facilitate the structural analysis of a masonry structure using a FE (e.g. Abaqus \cite{abaqus_inc_abaqus_2020}) or a DE focus (e.g. 3DEC \cite{itasca_consulting_group_inc_3dec_2016}), creating and running these models can be time-consuming and computationally expensive, which is unsuitable for explorative optimization processes. Inspired by Heyman's safe theorem \cite{heyman_stone_1966, heyman_stone_1997}, geometric strategies instead assess the static equilibrium of a masonry structure by modeling it as a network of compression forces. In the literature, geometrical approaches tailored to two-dimensional \cite{block_as_2006, lau_equilibrium_2006, michiels_form-finding_2018} and three-dimensional masonry structures \cite{odwyer_funicular_1999, block_thrust_2007, vouga_design_2012} have been proposed. Unlike their FE or DE counterparts, geometric strategies do not solicit material information about a masonry structure and are agnostic to the arrangement of contact interfaces beween masonry elements and joint types. While this can simplify and speed up the modeling process, geometric approaches overlook potentially relevant structural actions occurring at the joint interfaces which may be critical to assessing the inter-construction states in a masonry structure.
+
+\subsection{Next Steps in Robotic Fabrication}
+Research on robotic construction in industry has focused on technical advances in the automation of traditional building practices, which are wasteful from the perspective of material usage. Meanwhile, recent academic research has focused on expanding design possibilities, using robots to achieve local geometric differentiation without a specific emphasis on material efficiency. There are opportunities in utilizing robotic construction to combine both of these approaches -- keeping material efficiency and geometric complexity central to the process with the overall goal of making construction less labor intensive and more productive. Recent work \cite{parascho_robotic_2020, parascho_lightvault_2021, han_concept_2020} has demonstrated the feasibility of moving away from the vertical construction paradigm common to robotic masonry fabrication, by sequencing two robotic arms to build a complex vaulted structure without temporary scaffolding. The research presented in this chapter builds on this work by providing a numerical basis for how to develop and evaluate such robotic fabrication sequences. It also extends the fabrication framework developed in \cite{parascho_robotic_2020, parascho_lightvault_2021, han_concept_2020} by introducing the concept of multi-objective optimization to determine how robotic support positions can be determined while satisfying structural performance criteria.
+
+
+
+
+% ----------------------------------------------------------------------------------------------------
+% 3. Methodology
+% ----------------------------------------------------------------------------------------------------
+\section{Methodology}\label{mod_approach}
+
+\subsection{Masonry Vault Prototype}\label{sec:2_prototype}
+The research presented in this chapter explores cooperative robotic building sequences in the context of a recently constructed masonry vault prototype \cite{parascho_lightvault_2021}. \Cref{fig:arch_vault,,fig:full_vault} show the 338-brick building-scale vault, which is tiled using a herringbone tesselation pattern. This structure is assembled using two ABB 6400 industrial robotic arms (referred to as rob1 and rob2 throughout the chapter), with a maximum reach of 2.55 m and payload of 40 kg. These robots have a position repetition accuracy of 0.4 mm, with 98\% of movements within 1 mm \cite{abb_product_2020}. Previous work related to the development of the robotic fabrication method, the prototyping process, and the construction of the final vault are described in a series of recent publications \cite{han_concept_2020, parascho_robotic_2020, parascho_lightvault_2021}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.80\linewidth]{ambika_full_vault}
+	\caption{The vault prototype assembled with two industrial robotic arms.}
+	\label{fig:full_vault} 
+\end{figure}        
+
+
+
+\begin{figure*}[ht]
+	\centering
+	\begin{subfigure}[t]{0.57\linewidth}
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.99\textwidth]{midarch_perspective}
+	\end{subfigure}
+	%
+	\begin{subfigure}[t]{0.42\linewidth}
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip,width=0.99\textwidth]{midarch_elevation}
+	\end{subfigure}
+	%
+	\caption{Geometry of the vault prototype and central arch (dimensions in mm).}
+	\label{fig:arch_vault} 
+\end{figure*} 
+
+The construction of this prototype can be split up into two main phases: (1) the central arch, and (2) the full vault. The central arch consists of 25 rectangular bricks, arranged with a span/height of 2.08/1.93 m respectively as shown in \Cref{fig:arch_vault}. Each brick has standardized dimensions of $246 x 116 x 53 mm$, and is made from cast glass with a density of $2420 \: kg/m^3$ (i.e., self-weight of $3.66 kg$ per brick). This structure represents a significant step forward in the field of robotic masonry construction, breaking with the vertical layer-based construction that is demonstrated in preceding robotic construction projects discussed in \Cref{sec:2_automated_brick,,sec:2_dfab}. The first construction phase is critical when developing a scaffold-free fabrication method since the arch is not self-stable in its unfinished state. Thus the robotic fabrication methods must break from the traditional two-sided construction approach where external scaffolding is required as shown in \Cref{fig:2robot_traditional}. Instead, the arch is built up from only one end, while utilizing the robots as mobile temporary supports to the unfinished arch during the full construction sequence as outlined in \cite{parascho_robotic_2020}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.80\linewidth]{arch_scaffolding}
+	\caption{Scaffolding in traditional two-sided masonry arch construction.}
+	\label{fig:2robot_traditional}
+\end{figure}      
+
+Once the central arch is completed (see \Cref{fig:arch_vault}), the second phase consists of building up the rest of the vault around it over a skewed plan area of $2670 x 4350 mm$. A step-wise sequence is used, where the central arch acts as a support from which to extend the structure out in overlapping diagonal layers.  An interlocking herringbone tessellation pattern is used throughout the full vault since this pattern provides local support to the surrounding bricks during construction \cite{paris_statics_2020, pizzigoni_herringbone_2018}. Thus, the central arch is built with a horizontal-horizontal-vertical 3-brick pattern, which allows it to interlock with the surrounding herringbone-patterned vault. Details on the tessellation and layered construction sequence are outlined in \cite{parascho_robotic_2020}.
+
+\subsection{Computational Modeling Approach}\label{sec:comp_model_approach}
+The purpose of the computational modeling is to obtain values of displacements, forces and stability feedback throughout all the stages in the construction process for the masonry arch. The three robotic fabrication sequences proposed in \Cref{sec: fab_strategies_2rob,sec: fab_strategies_3rob} are evaluated on the basis of their structural performance. The complexity or precision of a Finite Element (FE) mesh-based or Discrete Element (DE) model is deemed unnecessary since only the linear elastic behaviour of the masonry vault is required to assess performance in the context of the construction sequence. Therefore, only the static force distribution and instantaneous displacements are used as the basis for evaluating performance (i.e., nonlinear or long-term responses are not being evaluated). Furthermore, the large number of independent models that need to be evaluated to fully characterise the solution space of a building sequence optimization problem of this scale also preclude the use of FE mesh-based or DE analysis methods as they are computationally taxing. For example, the placement of each new brick constitutes a new structural model, which requires updating geometry, loading, and support conditions. Finally, a traditional modeling environment (i.e., non-parametric) is not suited to the optimization process used to calculate support points described in \Cref{sec: fab_strategies_3rob}.
+
+Based on these analysis requirements, a method based on a highly abstracted structural model using only linear elements is proposed here. First, the masonry structure is modelled as a geometric system, represented as a network graph (i.e., a collection of nodes connected by edges) as a way to simplify the discrete element assembly while still capturing its geometry and topology \cite{kaveh_role_2005, kaveh_efficient_2010}. Next, this geometric representation of the structure is turned into a simplified FE model, using linear elements and joints to represent the edges and nodes of the network. Specifically, edges become the structural elements (i.e., bricks) and nodes become either the centroids of the bricks or flexible connection joints between bricks (i.e., mortar bond) as shown in \Cref{fig:doublecross}. Generating such a model from a given set of discrete elements can be scripted in a parametric environment \cite{rutten_grasshopper_2007}, allowing for the rapid generation of numerous models representing the different construction steps, and simultaneous linear elastic analysis using existing FE software \cite{preisinger_karamba_2014}. Linear and rotational stiffness values can be assigned to the elements and joints respectively. Rigid elements and flexible joints are used to represent the deformations that occur in the masonry assembly analysed in the linear range.
+
+With such a model, based on a network representation, one compromises in accuracy but gains far more in ``explorativity'' by virtue of its simplicity and application in a parametric environment. \Cref{sec:double_cross} describes this approach in more detail as it is specifically applied to the analysis of the masonry vault prototype, highlighting the calibration performed to determine reasonable joint spring stiffness values.
+
+\subsubsection{The Double-Cross Model}\label{sec:double_cross}
+To model masonry assemblies the geometry of each masonry unit is simplified to a ``double-cross" network; the name is derived from the schematic appearance of this representation shown in \Cref{fig:doublecross}. This configuration is chosen since it represents the physical geometry and connection topology in a typical masonry structure. Each brick is assigned a total of six external nodes (two per long side and one on either short side) and two inner nodes (at the quarter-points, or centroids of each half-brick). In a typical assembly, individual bricks can be joined together by connecting their neighboring centroids with a connection edge, and splitting this element to create an external node at the location where the gap between the bricks occurs (i.e., the external nodes of two connected bricks coincide). Both internal (between two internal nodes) and external (between an internal and external node) edges are modeled as rigid elements. They connect to at least one rigid internal joint, which by formulation does not allow for any relative rotation in the edges connected to it. The result is capturing the overall rigidity of a masonry unit using only simple joint and linear elements. Meanwhile, the external nodes represent the connection points between rigid bricks, and are modeled as joints with linear and rotational spring stiffness that represent the flexibility of the connection mortar. \Cref{fig:doublecross} shows such a representation for a small subset of bricks arranged in a herringbone pattern taken from the vault prototype. \phantom{\cite{turner_stiffness_1956}}
+
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{1\linewidth}
+		\centering
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.70\textwidth]{double_cross_single}
+		\caption{components of a double-cross network model for a single brick}
+	\end{subfigure}
+	
+	\vspace{1em}
+	
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip,width=0.99\textwidth]{fullvault_render}
+		\caption{subset of bricks from the vault}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.50\linewidth}
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.99\textwidth]{double_cross_multiple}
+		\caption{network representation}
+	\end{subfigure}
+	%
+	\caption{Representing a masonry structure with the double-cross model.}
+	\label{fig:doublecross} 
+\end{figure}   
+
+
+\subsubsection{Joint and Element Calibration }\label{sec:2_joint_calibration}
+
+\begin{table*}[ht]
+	\renewcommand{\arraystretch}{0.85}
+    \setlength{\tabcolsep}{3pt}
+	\footnotesize
+	\centering
+	\caption{Summary of structural parameters for full-scale masonry arch tests with published load-deflection data}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{ll c rrrrc c rlll}
+			\specialrule{.10em}{0.2em}{.2em}
+			\centering
+			%
+			&\multirow{3}{*}{\normalsize{Reference}}	
+			&\phantom{a}%
+			&\multicolumn{1}{c}{\normalsize{$L$}}
+			&\multicolumn{1}{c}{\normalsize{$r$}} 
+			&\multicolumn{1}{c}{\normalsize{$b$}} 
+			&\multicolumn{1}{c}{\normalsize{$t$}} 
+			&\multicolumn{1}{c}{\normalsize{$\#_{bricks}$}}
+			&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\multicolumn{1}{c}{\normalsize{$h$}}
+			&\multicolumn{1}{c}{\normalsize{$\gamma_{f}$}} 
+			&\multicolumn{1}{c}{\normalsize{$\gamma_{m}$}} 
+			&\multicolumn{1}{c}{\normalsize{$x$}} 
+			\\	
+			%
+			[0.8ex]
+			\cmidrule{4-8} \cmidrule{10-13}
+			%
+			&\phantom{a}	
+			&\phantom{a}
+			&\multicolumn{1}{c}{$\left[m\right]$}
+			&\multicolumn{1}{c}{$\left[m\right]$} 
+			&\multicolumn{1}{c}{$\left[m\right]$} 
+			&\multicolumn{1}{c}{$\left[mm\right]$} 
+			&\phantom{a}%
+			&\phantom{a}%
+			&\multicolumn{1}{c}{$\left[mm\right]$}
+			&\multicolumn{1}{c}{$\left[\frac{kg}{m^3}\right]$}
+			&\multicolumn{1}{c}{$\left[\frac{kg}{m^3}\right]$}
+			&\multicolumn{1}{c}{$\left[m\right]$}
+			\\
+			%
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			$1$  & Royles and Hendry (1991) \cite{royles_model_1991} & &2.180 &1.090 &1.690 &103 &46\tnote{1}  & &240 &1430 &2000\tnote{1}  &0.750\\
+			$2$  & Melbourne and Walker (1988) \cite{melbourne_load_1988} & &1.600 &0.800 &1.000 &100 &31 & &150 &1560 &2100 &0.550\\
+			$3$  & Melbourne et al. (1997) \cite{melbourne_collapse_1997} & &3.220 &0.860 &2.880 &215 &48\tnote{1}  & &170 &2260 &2400 &0.860\\
+			$4$  & Melbourne and Gilbert (1995) \cite{melbourne_behaviour_1995} & &3.220 &0.860 &2.880 &215 &48\tnote{1}  & &300 &2260 &2400 &0.860\\
+			$5$  & Melbourne and Gilbert (1995) \cite{melbourne_behaviour_1995} & &5.450 &1.470 &3.010 &445 &81\tnote{1}  & &350 &2260 &2400 &1.470\\
+			$6$  & Gilbert et al. (2007) \cite{gilbert_small_2007} & &3.220 &0.860 &1.010 &215 &48\tnote{1}  & &305 &1950 &2360 &0.860\\
+			$7$  & Towler and Sawko (1982) \cite{towler_limit_1982} & &4.220 &1.110 &1.100 &215 &70\tnote{2} & &250 &2000\tnote{2} &2000\tnote{2} &2.110\\
+			$8$  & Swift et al. (2013) \cite{swift_physical_2013} & &3.220 &0.860 &1.010 &215 &48 & &300 &2040 &2000\tnote{2} &0.860\\
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+		%
+		\begin{tablenotes}
+			\scriptsize
+			\item[1] data not found in original paper, taken from summary by \cite{kaminski_tests_2010}
+			\item[2] data not found in original paper, estimated
+		\end{tablenotes}
+	\end{threeparttable}
+	
+	\label{table:exp_data}
+\end{table*}
+
+Despite being a simplification, the double-cross representation must still be able to capture displacements and force redistribution in a realistic manner. Structural stiffness is used as a proxy for this -- if an analyzed structure exhibits accurate stiffness (i.e., load/deflection), then the assumption is that deflections and force redistribution are also accurate in the structure \cite{turner_stiffness_1956}.
+
+To improve the results from the double-cross model, the linear and rotational springs in the connection joints are calibrated on the basis of existing experimental results from full-scale masonry barrel vault load tests documented in the literature \cite{royles_model_1991,melbourne_load_1988,melbourne_collapse_1997,melbourne_behaviour_1995,gilbert_small_2007,towler_limit_1982,swift_physical_2013}. The reader is referred to \Cref{table:exp_data} for a list of references and values for all parameters defining the different structures: L = span length, r = vault radius, b = vault width (into the page), t = vault thickness, $\#_{bricks}$ = number of bricks in the vault, h = infill height above the crown, $\gamma_f$ = infill density, $\gamma_m$ = masonry density, x = loading distance. A generic experimental setup is schematically shown in \Cref{fig:arch_test}. These experiments take a monotonically increasing load (P) and apply it across the width (b) of the barrel vault, measuring the displacement under the load ($\Delta$). For calibration purposes, only results in the literature where experimental load-deflection data is provided are used, and where spandrels are detached from the arch structure. 
+
+Linear elastic FE analysis models are created for each of the masonry vaults summarized in  \Cref{table:exp_data}. These models are based on the same approach described in the \Cref{sec:comp_model_approach}: each brick in the arch is modeled as a rigid element connected to its neighbor at a flexible joint as shown in \Cref{fig:arch_test}. The full width (into the page) of the arch is represented by a single element since only in-plane behavior is examined in these tests. From this linear elastic analysis, the stiffness ($k_m$) is obtained as a ratio of the applied load to the vertical displacement at the loaded location. This analytical stiffness is then compared to the experimental secant stiffness ($k_e$) in the initial linear elastic region, which is based on the published load-displacement test data. \Cref{fig:secant_stiff} shows an example of this process using the data from Test \#1 \cite{royles_model_1991}. The rotational and linear spring stiffness of the joints are then calibrated to ensure the best agreement between experimental and analytical stiffness for all the available tests.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.99\linewidth]{calibration}
+	\caption{Deformed shape superimposed on the analytical representation of a generic masonry barrel vault load test.}
+	\label{fig:arch_test}
+\end{figure}   
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=0.99\linewidth]{calibration_chart}
+	\caption{Tuning the analytical to the initial experimental secant stiffness.}
+	\label{fig:secant_stiff}
+\end{figure}   
+
+The results of the calibration are summarized in \Cref{table:model_results}, which also shows the relative error ($e_{rel}$) between the experimental ($k_e$) and analytical ($k_m$) stiffness when using calibrated linear and rotational joint springs in the analytical model. When compared to the experimental data, a calibrated linear spring stiffness of $100 \times 10^6 \: kN/m^3$ and rotational spring stiffness of $0.9 \times 10^6 \: kN/(rad \cdot m^2)$ are determined to minimize the error across the full data set. The linear spring stiffness falls within the $100 \times 10^6 - 100 \times 10^7 \: kN/m^3$ range as per recommendations in the literature \cite{simon_discrete_2016}. The rigid element and flexible joint approach used in the double-cross model is thus capable of capturing the in-plane load-deflection behaviour of a masonry structure in the elastic range. 
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\small
+	\centering
+	\caption{Initial experimental secant arch stiffness compared to calibrated element-spring model stiffness}
+	\vspace{-2.5mm}
+	
+	\begin{tabular}{cl rrr}
+		\specialrule{.10em}{0.2em}{.2em}
+		\centering
+		%
+		
+		&\multirow{3}{*}{\normalsize{Reference}}
+		&\multicolumn{1}{c}{\normalsize{$k_{e}$}}
+		&\multicolumn{1}{c}{\normalsize{$k_{m}$}}
+		&\multicolumn{1}{c}{\normalsize{$e_{rel}$}}
+		\\	
+		%
+		[0.8ex]
+		\cmidrule{3-5}
+		%
+		&\phantom{a}
+		%&\phantom{a}
+		&\multicolumn{1}{c}{$\left[\frac{kN}{mm}\right]$}
+		&\multicolumn{1}{c}{$\left[\frac{kN}{mm}\right]$}
+		&\multicolumn{1}{c}{$\left[\%\right]$}
+		\\
+		\specialrule{0.06em}{0.2em}{.2em}
+		%
+		$1$ & Royles and Hendry (1991) \cite{royles_model_1991}  &51 &41 &-19.6\\
+		$2$ & Melbourne and Walker (1988) \cite{melbourne_load_1988} &138 &143 &3.6\\
+		$3$ & Melbourne et al. (1997) \cite{melbourne_collapse_1997} &378 &434 & 14.8\\
+		$4$ & Melbourne and Gilbert (1995) \cite{melbourne_behaviour_1995} &535 &417 & -22.1 \\
+		$5$ & Melbourne and Gilbert (1995) \cite{melbourne_behaviour_1995} &803 &264 & -67.1\\
+		$6$ & Gilbert et al. (2007) \cite{gilbert_small_2007} &132 &140 &6.1\\
+		$7$ & Towler and Sawko (1982) \cite{towler_limit_1982}  &70 &71 &1.4\\
+		$8$ & Swift et al. (2013) \cite{swift_physical_2013} &120 &141 &17.5\\
+		%
+		\specialrule{0.10em}{0.2em}{.2em}
+		%
+	\end{tabular}
+	
+	\label{table:model_results}
+\end{table}
+
+
+\subsubsection{3D Validation of Model}
+Further validation of the proposed model is performed to verify the ability of the double-cross model to capture out-of-plane displacements when using the joint stiffness results determined in \Cref{sec:2_joint_calibration}. This validation is performed against static DE models implemented using the 3DEC software \cite{itasca_consulting_group_inc_3dec_2016}, representing snapshots of the prototype arch during various stages of construction. These models are numerical approximations of the real behavior, but by formulation are more realistic and accurate and computationally more expensive. Thus, the goal is to verify that the results of the DE models show good agreement with those of the simplified double-cross representation for situations that cause out-of-plane effects in the arch.
+
+In the DE model, the partial arch is modelled as an assembly of rigid bodies, whose shape corresponds to the masonry bricks (i.e., rectangular prisms with 8 vertices). The joints between the bricks are modelled by interfaces ruled by a Mohr-Coulomb model \cite{simon_discrete_2016}, with the parameters based on the characteristics of the epoxy mortar used (i.e., Oatey\textsuperscript{\textregistered} Fix-It\texttrademark\  Stick \cite{oatey_oatey_2020}). The cohesion used is 2 MPa and the tensile stress cut-off is 3 MPa. Joint stiffness and shear stiffness are set to $jK_n = 100 \times 10^6 \: kN/m^3$ and $jK_s = 10 \times 10^6 \: kN/m^3$ with a friction angle of 25$^{\circ}$, which is based on \cite{simon_discrete_2016}.
+
+For the construction stages investigated, the robotic arm acting as a support to the structure is simulated with two fixed rigid bodies. These are labelled at (A) and (B) in \Cref{fig:3dec_image}, which otherwise shows a visualization of the discrete element model with the brick interfaces highlighted. These two rigid bodies effectively support the active block in the arch at two small interfaces to simulate how a robot grips the brick. Unlike the typical brick-brick mortar joints, at the pinch location the normal and shear stiffness values are an order of magnitude greater to mimic the effect of a robotic gripper support, thus preventing any sliding deformation. Therefore, the arch is vertically supported while still able to rotate about the axis formed by the rigid support blocks. Global out-of-plane displacements of the arch are determined as a function of this support condition.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [trim={0cm 0.0cm 0cm 0.0cm}, clip, width=0.50\linewidth]{3DEC_support}
+	\caption{3DEC model where robotic support is modelled as a two-block interface restraint (A and B).}
+	\label{fig:3dec_image}
+\end{figure}  	    
+
+The validation is performed across four separate models corresponding to steps in the arch construction sequence where the robot places and supports bricks 17, 18, 23 and 24. These construction steps are expected to produce out-of-plane twisting as seen in the \textit{sequential method} discussed further in \Cref{sec: fab_strategies_2rob}. All DE analyses are performed with self-weight loading and supports at both the location where the robotic arm holds a brick and the fixed base. The DE computations are carried out over a sufficient time scale for the structure to reach equilibrium (i.e., until the unbalanced force is 0 kN), and in that state the displacements at the vertices of the discrete blocks are output. These rigid block vertex displacements are then converted to equivalent displacements at nodal locations coinciding with the inner nodes in the double-cross representation (see \Cref{fig:3dec_image2}). This conversion is performed based on weighted averages of the corner displacements as the blocks are rigid and therefore experience no relative deformation between vertices.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics [trim={0cm 0.0cm 0cm 0.0cm}, clip, height=9.9cm]{3DEC_disp_nodes_1}
+		\caption{displacements of the rigid blocks}
+	\end{subfigure}   
+	\begin{subfigure}[t]{0.49\linewidth}
+		\includegraphics [trim={0cm 0.0cm 0cm 0.0cm}, clip, height=9.9cm]{3DEC_disp_nodes_2}
+		\caption{equivalent nodal displacements}
+	\end{subfigure}   
+	
+	\caption{DE analysis of the partial arch.}
+	\label{fig:3dec_image2}
+\end{figure}  
+
+The results of this comparison are shown in \Cref{table:validation_results}, where the average relative error in the displacements between nodes across the discrete and finite element models is used as the comparison metric for each of the four partial arches modeled. This average error is based on results ranging from 33 to 47 data points for model 1 to 4 respectively. The magnitude of the errors is at a similar order of magnitude to those obtained in the in-plane calibration (see \Cref{sec:2_joint_calibration}), which means that the results for the out-of-plane behaviour are satisfactory using the simplified formulation. A comparison between the experimental calibration and DE validation tests show that when calibrated the tuned double-cross model is capable of representing both the in-plane and out-of-plane behaviour of a masonry structure within a ~20\% margin.
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\centering
+	\caption{Average relative error in displacements across models between the proposed simplified model and DE analysis results.}
+	\vspace{-2.5mm}
+	
+	\begin{tabular}{cccr}
+		\specialrule{.10em}{0.2em}{.2em}
+		%
+		\multicolumn{1}{c}{\normalsize Model}
+		&\multicolumn{1}{c}{\normalsize Bricks}
+		&\multicolumn{1}{c}{\normalsize $\#_{nodes}$}
+		&\multicolumn{1}{c}{\normalsize $\%_{error}$}
+		\\
+		\specialrule{0.06em}{0.2em}{.2em}
+		$1$ &17 &33 &20.9\\
+		$2$ &18 &35 &24.7\\
+		$3$ &23 &45 &-14.9\\
+		$4$ &24 &47 &-15.3\\
+		%
+		\specialrule{0.10em}{0.2em}{.2em}
+		%
+	\end{tabular}
+	
+	\label{table:validation_results}
+\end{table}
+ 
+
+
+% ----------------------------------------------------------------------------------------------------
+% 4. 2-Robot Fabrication Strategies
+% ----------------------------------------------------------------------------------------------------
+
+\begin{figure*}[b!]
+	\begin{subfigure}[t]{0.39\linewidth}
+		\includegraphics [trim={0cm 0cm 0cm 0cm}, clip, width=1\textwidth]{2rob_partial_arch}
+		\caption{partial arch with 16 bricks placed}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.59\linewidth}
+		\includegraphics [trim={0cm 0cm 1cm 0cm}, clip, width=1\textwidth]{2rob_sequences}
+		\caption{sequential and cantilever construction sequences for bricks \#17-19}
+		\label{fig:two_robot_methods}
+	\end{subfigure}
+	\caption{Unidirectional construction sequences where two robots alternate the support of the partial arch and the placement of new bricks.}
+	\label{fig:2rob_methods}
+\end{figure*} 
+
+
+\section{Central Arch Fabrication with Two Robots}\label{sec: fab_strategies_2rob}
+The first phase of the vault's construction (i.e., the central arch) represents a challenge from the perspective of a scaffold-free construction method, since the structure is not self-stable before the central arch is complete. To unlock the construction potential of using two robots, this research builds on an existing cooperative robotic fabrication strategy first introduced in \cite{parascho_robotic_2020}. A unidirectional construction approach is implemented, where the arch is built up from one end to the other. Contrary to the traditional method, discussed in \Cref{sec:2_prototype}, there is only one active build edge. This means that the robots can be sequenced in a cooperative manner by taking turns either placing or supporting the partial arch at this active edge. In this way, the full arch can be constructed without any external scaffolding by relying on robotic support.
+
+Two different build strategies, referred to as the \textit{sequential method} or \textit{cantilever method} are defined in \cite{parascho_robotic_2020}. \Cref{fig:2rob_methods} schematically shows an example of these methods at work when when adding three bricks to the partial arch starting from brick \#17. In both sequences, each build step consists of one robot performing either of two actions: placement of a brick (P), or release of a brick (R) (i.e., adding a new brick takes two discrete steps). The strengths and weaknesses of each method are discussed in \Cref{sec:sequential,,sec:cantilever}, with detailed structural results for each build step when constructing the full 25-brick central arch using each sequence in Appendix A.
+
+
+\subsection{Sequential Method} \label{sec:sequential}
+The \textit{sequential method} (shown in the top of \Cref{fig:two_robot_methods}), where the left and right robots alternate placing bricks, is the intuitive way to sequence two robots. This is a relatively simple sequence to implement robotically, but there are structural issues that arise from the support position location as function of the herringbone tessellation pattern. The bricks in the arch must be placed in a horizontal-horizontal-vertical pattern (as shown in \Cref{fig:arch_vault,fig:sequential_twist_offcenter}) to allow the arch to later interlock with the rest of the vault. When using two robots (i.e., rob1 and rob2) on either side of the arch, there are stages in the construction when there is only one robot supporting the structure (i.e., a release (R) step) as the other robot releases the structure to retrieve the next brick. At these stages there is only one robot supporting the arch while gripping a horizontal brick. \Cref{fig:sequential_twist} illustrates this condition and the force couple, $M = F \cdot e$, that results from such a situation, causing critical out-of-plane twisting displacement that the arch is not capable of resisting. This moment scales with the magnitude of the force (F), which is equal to the thrust exerted by the partial arch on the robot as a function of the geometry and self-weight distribution in the structure. The lever arm (e) is equal to the deviation between the thrust line and support point, which is $135 \pm 15 mm$.
+
+This off-center loading condition occurs at eight different steps in the full construction sequence (i.e., steps 9, 11, 21, 23, 33, 35, 45, and 47). \Cref{table:sequential_twist} summarizes the main structural results from these steps, showing the following: sequence step number; type of step (release or placement); total bricks in the arch; what brick (b) and node (n) each robot is gripping; $F_{rob}$ = load supported by the robot; $F_{sup}$ = load at the base support; $M_{sup}$ = moment at the base support; $\Delta_{max}$ = maximum nodal displacement. $C_1 = M_{sup}/M_{sup,avg}$ is the moment multiple based on an average support moment of $6.8 \: N \cdot m$ over the full sequence, and $C_2 = \Delta_{max}/\Delta_{max,avg}$ is the displacement multiple based on an average maximum nodal displacement of $7.3 \times 10^{-3} \: mm$ over the full sequence. The full data for all 49 steps required to build the 25-brick arch with the \textit{sequential method} can be found in Appendix A, \Cref{table:experimental_data1}.
+
+\begin{table*}[ht]
+	\small
+	\renewcommand{\arraystretch}{1.1}
+    \setlength{\tabcolsep}{3pt}
+	\centering
+	\caption{Analysis results for the off-center support steps in the sequential method}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{c ccc r cccc r cccScr SS}
+			\specialrule{.10em}{0.2em}{.2em}
+			%
+			&\multirow{2}{*}{\normalsize  Step}
+			&\multirow{2}{*}{\normalsize  Type}
+			&\multirow{2}{*}{\normalsize \makecell{Total\\Bricks}}
+			&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\multicolumn{2}{c}{\normalsize $rob1$}
+			&\multicolumn{2}{c}{\normalsize $rob2$}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\normalsize  $F_{rob1}$}
+			&\multicolumn{1}{c}{\normalsize  $F_{rob2}$}
+			&\multicolumn{1}{c}{\normalsize  $F_{sup}$}
+			&\multicolumn{1}{c}{\normalsize  $M_{sup}$}
+			&\multicolumn{1}{c}{\normalsize  $C_1$}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\normalsize  $\Delta_{max}$}
+			&\multicolumn{1}{c}{\normalsize  $C_2$}
+			\\	
+			%
+			[0.8ex]
+			\cmidrule{6-9}
+			\cmidrule{11-15}
+			\cmidrule{17-18}
+			%
+			&\multicolumn{1}{c}{}
+			&\phantom{a}
+			&\multicolumn{1}{c}{}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small $[N]$}
+			&\multicolumn{1}{c}{\small $[N]$}
+			&\multicolumn{1}{c}{\small $[N]$}
+			&\multicolumn{1}{c}{\small $[N \cdot m]$}
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\scriptsize  $[10^{-3} \: mm]$}
+			&\phantom{a}
+			\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			&9 &release &5 &&5 &8 &-- &-- &&75.0 &-- &106.1 &6.8 &1.0 &&1.3 &0.2\\
+			&11 &release &6 &&-- &-- &6 &11 &&-- &85.2 &132.2 &8.3 &1.2 &&2.2 &0.3\\
+			&21 &release &11 &&11 &20 &-- &-- &&86.6 &-- &311.7 &21.5 &3.2 &&12.8 &1.8\\
+			&23 &release &12 &&-- &-- &12 &23 &&-- &89.7 &347.9 &22.0 &3.2 &&16.9 &2.3\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			&33 &release &17 &&17 &33 &-- &-- &&170.8 &-- &470.0 &21.3 &3.1 &&70.8 &9.7\\
+			&35 &release &18 &&-- &-- &18 &35 &&-- &203.8 &468.9 &29.6 &4.4 &&97.5 &13.4\\
+			&45 &release &23 &&23 &44 &-- &-- &&369.3 &-- &477.1 &56.4 &8.3 &&264.4 &36.2\\
+			&47 &release &24 &&-- &-- &24 &47 &&-- &405.5 &474.7 &66.0 &9.7 &&306.5 &42.0\\
+			%
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+	\end{threeparttable}	
+	
+	\label{table:sequential_twist}
+\end{table*}   
+
+Four of the off-center steps occur while building up to the crown (steps 9, 11, 21, and 23) and four while building down from the crown (steps 33, 35, 45, and 47). The four steps after the crown experience maximum nodal displacements at multiples of 9.7 to 42.1 times greater than the average maximum displacements for all other typical loading steps ($7.3 \times 10^{-3}$ mm), and moment multiples of 4.1 to 9.7 times the average moment across all the steps ($6.8 \: N \cdot m$). An example of such a twisting step is 35-R where $rob2$ is holding brick 18 at node 35, which is schematically shown in \Cref{fig:sequential_twist_35}. This step has a displacement and moment multiple of 13.4 and 4.4 respectively. In general, the large displacement multiples experienced during this fabrication process suggest that the sequential method, while easy to implement, is not robust and scalable. This method is not suitable for structures with larger axial thrusts. Ideally maximum out-of-plane displacements and moments should be kept below the value for Step 35 (i.e., $\approx100 \times 10^{-3} \: mm$ and $\approx30 \: N \cdot m$), which can be detrimental and lead to collapse of the arch. While this collapse mechanism is a function of the geometry, small and medium span arches can be fabricated without collapse using the \textit{sequential method}, but at the larger scale this twisting behavior must be avoided.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm}, clip,width=0.99\linewidth]{twist_moments}
+		\caption{Offset robotic support location}
+		\label{fig:sequential_twist_offcenter}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm}, clip,width=0.99\linewidth]{twist_deflections}
+		\caption{Displaced shape for Step \#35}
+		\label{fig:sequential_twist_35}
+	\end{subfigure}
+	%
+	\caption{Twisting of the arch during construction with the sequential method.}
+	\label{fig:sequential_twist}
+\end{figure}  
+
+
+\subsection{Cantilever Method} \label{sec:cantilever}
+The \textit{cantilever method} (shown in the bottom of \Cref{fig:two_robot_methods}) is a more complex 2-robot sequence that was developed to solve the twisting issue experienced in the \textit{sequential method} \cite{parascho_robotic_2020}. The method is based around an alternating three brick placement sequence for each robot. \Cref{fig:2rob_methods} illustrates one full construction loop: \textit{rob2} supports the arch at brick 16, while \textit{rob1} places 3 bricks in sequence (i.e., steps 32, 34 and 36), after which their roles swap. Despite this difference, the \textit{cantilever method} shares $1/3$ of its steps in common with the \textit{sequential method}. For example, as shown in \Cref{fig:2rob_methods}, steps 32 and 37 out of the six steps in one loop are the same across both methods. These common steps are also highlighted in the full 49 step building sequence for the 25-brick arch in Appendix A, \Cref{table:experimental_data2}. The main benefit of the \textit{cantilever method} is that the support point swap (brick 19 in step 37 in the example above) always occurs when a robot is supporting the arch on a vertical brick, which is centered on the thrust line of the arch.
+
+\begin{table*}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\small
+	\centering
+	\caption{Comparison of cantilever to sequential method at critical steps}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{c cr SSSr SSSr SSS}
+			\specialrule{.10em}{0.2em}{.2em}
+			%
+			&\multirow{4}{*}{\normalsize Step}
+			&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\multicolumn{3}{c}{\normalsize $M_{sup}$}
+			&\phantom{\tiny a}
+			&\multicolumn{3}{c}{\normalsize $\Delta_{max}$}
+			&\phantom{\tiny a}
+			&\multicolumn{3}{c}{\normalsize $T_{max}$}
+			\\	
+			%
+			[0.8ex]
+			\cmidrule{4-6}
+			\cmidrule{8-10}
+			\cmidrule{12-14}
+			%
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{m{2em}}{\small $C$}
+			&\multicolumn{1}{c}{\small $S$}
+			&\multicolumn{1}{c}{\small $C/S$}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small $C$}
+			&\multicolumn{1}{c}{\small $S$}
+			&\multicolumn{1}{c}{\small $C/S$}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small $C$}
+			&\multicolumn{1}{c}{\small $S$}
+			&\multicolumn{1}{c}{\small $C/S$}
+			\\
+			%
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\scriptsize $[N \cdot m]$}
+			&\multicolumn{1}{c}{\scriptsize $[N \cdot m]$}
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\scriptsize  $[10^{-3} \: mm]$}
+			&\multicolumn{1}{c}{\scriptsize  $[10^{-3} \: mm]$}
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\scriptsize  $[N]$}
+			&\multicolumn{1}{c}{\scriptsize  $[N]$}
+			&\phantom{a}
+			\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			&	9	&&	2.9	&	6.8	&	0.43	&&	0.4	&	1.3	&	0.31	&&	68.6	&	36.9	&	1.9	\\
+			&	11	&&	1.6	&	8.3	&	0.19	&&	0.6	&	2.2	&	0.27	&&	69.1	&	45.5	&	1.5	\\
+			&	21	&&	20.7	&	21.5	&	0.96	&&	8.5	&	12.8	&	0.66	&&	78.4	&	23.7	&	3.3	\\
+			&	23	&&	18.6	&	22.0	&	0.85	&&	7.3	&	16.9	&	0.43	&&	90.8	&	11.4	&	8.0	\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			&	33	&&	4.6	&	21.3	&	0.22	&&	11.2	&	70.8	&	0.16	&&	29.6	&	0.8	&	37.0	\\
+			&	35	&&	5.3	&	29.6	&	0.18	&&	10.4	&	97.5	&	0.11	&&	59.3	&	0.8	&	74.1	\\
+			&	45	&&	3.7	&	56.4	&	0.07	&&	15.9	&	264.4	&	0.06	&&	34.8	&	0.8	&	43.5	\\
+			&	47	&&	0.9	&	66.0	&	0.01	&&	11.1	&	306.5	&	0.04	&&	69.6	&	0.8	&	87.0	\\
+			%
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+		
+		\begin{tablenotes}
+			\scriptsize
+			\item[] C = Cantilever Method, S = Sequential Method
+		\end{tablenotes}
+	\end{threeparttable}	
+	
+	\label{table:cantilever_compare}
+\end{table*}     
+
+Avoiding a support point swap while gripping a horizontal brick off-center leads to more consistent structural behavior across all the fabrication steps (i.e., no large jump in moments and displacements between steps). This consistency is shown in \Cref{table:cantilever_compare} when comparing the moment and maximum displacement between the two methods, for all the critical steps discussed in \Cref{sec:sequential}. Based on the moment and maximum displacement metrics, the \textit{cantilever method} consistently outperforms the \textit{sequential method}. This performance is exemplified in the four critical steps after the crown (i.e., steps 33, 35, 45 and 47), where moments and maximum displacements are reduced by 78-99\% and 84-96\% respectively. Eliminating the twist allows the central arch to maintain stability and to be constructed without temporary scaffolding, as shown in \Cref{fig:2robot_sequence1}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm},clip,width=0.99\linewidth]{ambika_arch2}
+	%
+	\caption{Two robots build the central arch using the cantilever method.}
+	\label{fig:2robot_sequence1}
+\end{figure}  
+
+While the \textit{cantilever method} successfully mitigates the critical twisting action, it does introduce a new challenge: during certain stages in the sequence there are up to three bricks being cantilevered from the closest robotic support point. This partial assembly is therefore relying on the tensile capacity of a single brick-brick connection at the fixed support. This is not a reliable strategy since it is highly sensitive to the connection and brick material used. For the prototype, this is solved by using fast-setting epoxy putty \cite{oatey_oatey_2020} that can support a cantilevered load equivalent to five bricks \cite{parascho_robotic_2020}. But in general, this direct reliance on the mortar strength raises questions about scalability and efficiency of the \textit{cantilever method}. The connection material needs to be fully cured before proceeding to the next step, which slows down construction significantly. But this was not a significant factor as the epoxy only required $\approx$ 15 mins to cure. But if traditional mortar is used, coupled with heavier construction loads (i.e., heavier or larger bricks), resisting the tension caused by the cantilevered support condition within a reasonable time-frame would not be feasible.
+
+In general, the \textit{cantilever method} performs worse with respect to tensile forces in the members than the \textit{sequential method}, which is typically undesirable in masonry construction. This comparison is made in the $T_{max}$ column in \Cref{table:cantilever_compare}, where the maximum tensile force in an element at a step is shown for both methods. \Cref{table:2robot_tension} shows the average maximum tension forces in the elements across all steps in the full construction sequence, steps before the crown, and steps after the crown. These values are consistently 40-80\% higher for the \textit{cantilever method}, although the absolute maxima are the same for both.
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\small
+	\centering
+	\caption{Tensile forces in both 2-robot sequences (in N)}
+	\vspace{-2.5mm}
+	
+	\begin{tabular}{lSS}
+		\specialrule{.10em}{0.2em}{.2em}
+		%
+		\multicolumn{1}{c}{}
+		&\multicolumn{1}{c}{\normalsize Sequential}
+		&\multicolumn{1}{c}{\normalsize Cantilever}
+		\\
+		\specialrule{0.06em}{0.2em}{.2em}
+		Average $T_{max}$ in full sequence &38.0 &53.7\\
+		Average $T_{max}$ before crown &55.2 &80.0\\
+		Average $T_{max}$ after crown &17.4 &30.6\\
+		Maximum $T_{max}$ &114.4 &111.5\\
+		%
+		\specialrule{0.10em}{0.2em}{.2em}
+		%
+	\end{tabular}
+	
+	\label{table:2robot_tension}
+\end{table}
+
+
+\subsection{General Challenges with 2-Robot Fabrication Methods}    
+Neither of the 2-robot construction methods discussed in \Cref{sec:sequential,,sec:cantilever} are a perfect solution to the scaffold-free construction goal. The \textit{sequential method} suffers from twisting displacements at certain steps, but minimizes overall tensile forces since the arch is always supported on the last brick placed. On the other hand, the \textit{cantilever method} minimizes the out-of-plane deformations during construction but suffers from a reliance on the tensile capacity of the mortar. These two methods do not constitute all the possible sequences, but all 2-robot fabrication sequences face issues related to scaling the size of the structure and reaching the maximum load capacity of the robots themselves. Regardless of the specific fabrication sequence, when using two robots there is always a situation where only one robot is gripping the structure. The load path is determinate, so the support force grows proportional to the size and weight of the arch. The maximum forces in the robots for the full construction sequences are shown in \Cref{table:2robot_forces}. Although the two methods have different overall behaviors, the maximum force in each robot required to support the arch is similar. 
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\small
+	\centering
+	\caption{Maximum forces supported by the robots}
+	\vspace{-2.5mm}
+	
+	\begin{tabular}{lc rr}
+		\specialrule{.10em}{0.2em}{.2em}
+		\centering
+		%
+		\phantom{a}%to space out the top headings nice
+		&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+		&\multicolumn{1}{c}{\normalsize{rob1}}
+		&\multicolumn{1}{c}{\normalsize{rob2}}
+		\\	
+		%
+		[0.8ex]
+		\cmidrule{3-4}
+		%
+		\phantom{a}
+		&\phantom{a}
+		&\multicolumn{1}{c}{$N$}
+		&\multicolumn{1}{c}{$N$}
+		\\
+		\specialrule{0.06em}{0.2em}{.2em}
+		%
+		Sequential Method &&369 &406\\
+		Cantilever Method &&362 &409\\
+		\specialrule{0.10em}{0.2em}{.2em}
+		%
+	\end{tabular}
+	
+	\label{table:2robot_forces}
+\end{table}        
+
+% ----------------------------------------------------------------------------------------------------
+% 5. 3-Robot Fabrication Strategies
+% ---------------------------------------------------------------------------------------------------- 
+\section{Central Arch Fabrication with Three Robots}\label{sec: fab_strategies_3rob}
+Adding a third robot to the construction sequence can mitigate many of the issues that arise from using either of the 2-robot methods discussed in \Cref{sec:sequential,,sec:cantilever}, and thereby improving the overall scalability of a scaffold-free fabrication method by reducing the maximum support force in each robot, and minimizing tension forces, moments and displacements in the structure. A third robot (\textit{rob3}) is envisioned as a mobile agent, that has additional flexibility to place and support bricks from either side of the arch, unlike \textit{rob1} and \textit{rob2} which are fixed on either side of the structure. In the research presented in this chapter, only the structural influence of this third robot is investigated, omitting the challenges associated with the developing the fabrication setup around reachability and collision concerns.
+
+Based on the conclusions drawn from developing the 2-robot methods come the following design criteria for a 3-robot sequence as desired:
+
+\begin{enumerate}
+	\item no twisting: two robots must always be gripping the structure 
+	\item no cantilevering: a robot must always be supporting the very last brick in the partially constructed arch
+\end{enumerate}
+
+The inclusion of a third agent capable of placing and supporting means that the fabrication sequence is no longer prescriptive -- there is an additional robotic support available at each step beyond what is required for stability, which can be moved to support any free location on the structure. The selection of the location of the additional robotic support can be formulated as an optimization problem, where the new support position is calculated to improve a user-specified set of structural criteria. In \Cref{sec:opt_algo,,sec:optimization,,sec:optresults} the following is discussed: the optimization approach that is used to select support points, how a 3-robot optimization-based fabrication could be implemented, and the structural results of using an optimized fabrication sequence.
+
+\subsection{Optimization Algorithm}\label{sec:opt_algo}
+The goal of the optimization is to minimize the displacement and forces experienced by the partial arch during each construction step, and thus to determine the location on the structure that a robotic support should move to at the start of each optimization loop (outlined in \Cref{sec:5_3rob,,sec:5_3rob_2}). The optimization process is formulated in \Cref{eq:opt}, where an optimal node ($n^{\star}$) is defined as the support node on the structure that minimizes the sum of the average R-terms (i.e., performance ranks) at each of the fabrication steps for which the support is present. These rank terms represent the relative performance in a particular structural criterion when placing a support at the node being examined. First, an exhaustive set of FE structural analyses based on the double-cross representation are performed at each fabrication step, where the support point is moved to every possible support location on the structure. The number of possible support locations increases with the size of the partial arch. The structural behavior from each of these models is recorded (i.e., maximum tension in the element interfaces, moment at the support, forces in the robotic supports, and maximum displacement), and once all locations have been evaluated they are ranked from best to worst.
+
+For example, if there are a total of 17 bricks already placed in the partial arch structure, there are a potential $17 \times 2 = 34 $ possible support nodes in the structure for a robot to move to in the following step (less any that are not reachable based on kinematics and if a robot is already supporting that location). Thus, 34 models would be run for this step, varying the support location in each, and then ranking these models based on how they performed in each of the structural categories of interest. The sets of criteria can be chosen by the user, in the case of the arch, the two criteria to improve are shown in \Cref{eq:opt2,eq:opt3}. \Cref{eq:opt2} minimizes the following: maximum tension in the bricks ($T_{max}$), support moment at the base ($M_{sup}$), forces in all supporting robots ($R_{rob1}, R_{rob2}, R_{rob3}$). \Cref{eq:opt3} minimizes: maximum tension in the bricks ($T_{max}$), support moment at the base ($M_{sup}$), forces in the active robot moving to an optimized location ($R_{rob}$), and the maximum displacement in the arch ($\Delta_{max}$). 
+
+\begin{align} \label{eq:opt}
+	n^{\star} &= \operatorname*{argmin}_{(support \: node)} \sum_{i=1}^{4} \overline{R_i} \\
+	%
+	\nonumber\text{where}: \\
+	%
+	\overline{R} &= {\rm avg}\left( R^{T_{max}} + R^{M_{sup}} + R^{F_{rob1}} + R^{F_{rob2}} + R^{F_{rob3}}  \right)  \label{eq:opt2}\\
+	\overline{R} &= {\rm avg}\left( R^{T_{max}} + R^{M_{sup}} + R^{F_{rob}} + R^{{\Delta_{max}}}  \right)  \label{eq:opt3}
+\end{align}
+
+This optimization, based on multiple structural criteria, ensures that the selected support location leads to general improvements to all the important structural behavior criteria while minimizing negative side-effects. For example, to avoid reducing the deflection at the cost of higher forces in the supporting robots. \Cref{eq:opt2} is used for optimizations that occur before the crown of the arch has been reached, since deflections are not significant up to this point. \Cref{eq:opt3} is used for the optimizations after the crown, where the deflection and support force criteria are critical. Only the active robot -- the robot that is being moved in the optimization loop -- has its support force optimized.  
+
+\subsection{Optimization-Based Fabrication Sequences}\label{sec:optimization}
+\subsubsection{Modified Sequential Method}\label{sec:5_3rob_2}
+Given an existing 2-robot sequence, one can determine where the third support should be placed to mitigate any structural issues. For example, starting with the \textit{sequential method} and the challenges with twisting, the 3rd support could be placed on the structure to counteract this action. \Cref{table:optimization1} illustrates such a hypothetical scenario, starting with the partial arch during the \textit{sequential method} at step 8. Normally the following step would cause off-center twisting to occur as \textit{rob2} releases its grip (see Appendix A, \Cref{table:experimental_data1} for the full sequential sequence). But the third support is free to be placed at an optimal location on the structure before this twisting occurs, which is highlighted by the cells labelled ``O1'' in \Cref{table:optimization1}. This location is identified on the basis of an optimization; the selected brick and node to grip must lead to improved structural behavior in all three of the steps it will be present in. The objective function is thus formulated as choosing a support location that leads to the best cumulative performance in displacements, forces, and moments in the structure over all three steps. The issue with twisting on step 9 has thereby been resolved through the inclusion of the \textit{rob3} support, and this process is continued for the full fabrication sequence as the third support is continuously moved to optimize the behavior over the following range of three steps: $O2, O3, O4,...,On$. But not all fabrication steps are optimized when adding a third support to an existing 2-robot method in this way. For example, the steps when \textit{rob3} releases the structure and moves (10 and 12 in \Cref{table:optimization1}) are the same as in the standard 2-robot \textit{sequential method}.
+
+\definecolor{babyblue}{rgb}{0.54, 0.81, 0.94}
+
+\begin{table}[ht]
+	\small
+	\renewcommand{\arraystretch}{1.0}
+	\centering
+	\caption{Modifying the sequential method with an optimized third support}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{cc r cccccc}
+			\specialrule{.10em}{0.2em}{.2em}
+			%
+			\multirow{2}{*}{\small  Step\tnote{1}}
+			&\multirow{2}{*}{\small \makecell{Total\\Bricks}}
+			&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\multicolumn{2}{c}{\normalsize $rob1$}
+			&\multicolumn{2}{c}{\normalsize $rob2$}
+			&\multicolumn{2}{c}{\normalsize $rob3$}
+			\\	
+			%
+			[0.8ex]
+			\cmidrule{4-9}
+			%
+			\multicolumn{1}{c}{}
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			\vdots &\vdots &&\vdots &\vdots &\vdots  &\vdots &\vdots &\vdots \\
+			8 &4 &&5 &8 &4 &7 &-- &-- \\
+			&4 &&5 &8 &4 &7 &\cellcolor{babyblue}O1 &\cellcolor{babyblue}O1 \\
+			9\tnote{2} &4 &&5 &8 &-- &-- &\cellcolor{babyblue}O1 &\cellcolor{babyblue}O1 \\
+			&5 &&5 &8 &6 &11 &\cellcolor{babyblue}O1 &\cellcolor{babyblue}O1 \\
+			10 &5 &&5 &8 &6 &11 &-- &-- \\
+			&5 &&5 &8 &6 &11 &\cellcolor{babyblue}O2 &\cellcolor{babyblue}O2 \\
+			11\tnote{2} &5 &&-- &-- &6 &11 &\cellcolor{babyblue}O2 &\cellcolor{babyblue}O2 \\
+			&6 &&7 &13 &6 &11 &\cellcolor{babyblue}O2 &\cellcolor{babyblue}O2 \\
+			12 &6 &&7 &13 &6 &11 &-- &-- \\
+			\vdots &\vdots &&\vdots &\vdots &\vdots  &\vdots &\vdots &\vdots \\
+			%
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+		
+		\begin{tablenotes}
+			\scriptsize
+			\item[] \sethlcolor{babyblue} \hl{------} = optimized support location
+			\item[1] step numbering corresponds to the sequential method sequence
+			\item[2] steps experiencing off-center twisting in sequential method
+		\end{tablenotes}
+	\end{threeparttable}	
+	
+	\label{table:optimization1}
+\end{table}   
+
+
+\subsubsection{Optimized Three Robot Method}\label{sec:5_3rob}
+In contrast to a partially optimized sequence, as described in \Cref{sec:5_3rob_2}, a fully optimized fabrication sequence is one where each step is covered by an optimization calculation for any one of the robots. Such a sequence is superior to a modified 2-robot sequence, as the position of all three robots is actively included in the optimization process. Therefore, the whole fabrication sequence can be redefined with respect to a set of user-specified structural optimization criteria in addition to the no twisting and cantilevering design criteria, rather than just building on an existing and potentially limited 2-robot sequence. \Cref{table:optimization2} describes a fully \textit{optimized three robot method}, where every step is covered by an optimization calculation performed for the active robot (represented by the cell highlighted in blue).
+
+\begin{table}[ht]
+	\small
+	\renewcommand{\arraystretch}{1.00}
+	\centering
+	\caption{3-robot cascading optimization}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{cc r cccccc}
+			\specialrule{.10em}{0.2em}{.2em}
+			%
+			\multirow{2}{*}{\small  Step}
+			&\multirow{2}{*}{\small \makecell{Total\\Bricks}}
+			&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\multicolumn{2}{c}{\normalsize $rob1$}
+			&\multicolumn{2}{c}{\normalsize $rob2$}
+			&\multicolumn{2}{c}{\normalsize $rob3$}
+			\\	
+			%
+			[0.8ex]
+			\cmidrule{4-9}
+			%
+			\multicolumn{1}{c}{}
+			&\phantom{a}
+			&\phantom{a}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			&\multicolumn{1}{c}{\small b}
+			&\multicolumn{1}{c}{\small n}
+			\\
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			1	&	1	&&	1	&	1	&	--	&	--	&	--	&	--	\\
+			2	&	2	&&	1	&	1	&	2	&	2	&	--	&	--	\\
+			3	&	3	&&	1	&	1	&	2	&	2	&	\cellcolor{babyblue}O1	&	\cellcolor{babyblue}O1	\\
+			4	&	3	&&	--	&	--	&	2	&	2	&	\cellcolor{babyblue}O1	&	\cellcolor{babyblue}O1	\\
+			5	&	4	&&	4	&	7	&	2	&	2	&	\cellcolor{babyblue}O1	&	\cellcolor{babyblue}O1	\\
+			6	&	4	&&	4	&	7	&	--	&	--	&	\cellcolor{babyblue}O1	&	\cellcolor{babyblue}O1	\\
+			7	&	4	&&	4	&	7	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O1	&	\cellcolor{babyblue}O1	\\
+			8	&	4	&&	4	&	7	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O2	&	--	&	--	\\
+			9	&	5	&&	4	&	7	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O2	&	5	&	8	\\
+			10	&	5	&&	--	&	--	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O2	&	5	&	8	\\
+			11	&	5	&&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O2	&	\cellcolor{babyblue}O2	&	5	&	8	\\
+			12	&	5	&&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O3	&	--	&	--	&	5	&	8	\\
+			13	&	6	&&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O3	&	6	&	11	&	5	&	8	\\
+			14	&	6	&&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O3	&	6	&	11	&	--	&	--	\\
+			15	&	6	&&	\cellcolor{babyblue}O3	&	\cellcolor{babyblue}O3	&	6	&	11	&	\cellcolor{babyblue}O4	&	\cellcolor{babyblue}O4	\\
+			16	&	6	&&	--	&	--	&	6	&	11	&	\cellcolor{babyblue}O4	&	\cellcolor{babyblue}O4	\\
+			17	&	7	&&	7	&	13	&	6	&	11	&	\cellcolor{babyblue}O4	&	\cellcolor{babyblue}O4	\\
+			18	&	7	&&	7	&	13	&	--	&	--	&	\cellcolor{babyblue}O4	&	\cellcolor{babyblue}O4	\\
+			19	&	7	&&	7	&	13	&	\cellcolor{babyblue}O5	&	\cellcolor{babyblue}O5	&	\cellcolor{babyblue}O4	&	\cellcolor{babyblue}O4	\\
+			20	&	7	&&	7	&	13	&	\cellcolor{babyblue}O5	&	\cellcolor{babyblue}O5	&	--	&	--	\\
+			21	&	8	&&	7	&	13	&	\cellcolor{babyblue}O5	&	\cellcolor{babyblue}O5	&	8	&	15	\\
+			&	&&	&	&	&	&	\phantom{O12}	&	\phantom{O12}	\\
+			\vdots &\vdots &&\vdots &\vdots &\vdots  &\vdots &\vdots &\vdots \\
+			&	&&	&	&	&	&	\phantom{O12}	&	\phantom{O12}	\\
+			
+			58	&	17	&&	--	&	--	&	\cellcolor{babyblue}O14	&	\cellcolor{babyblue}O14	&	17	&	33	\\
+			59	&	17	&&	\cellcolor{babyblue}O15	&	\cellcolor{babyblue}O15	&	\cellcolor{babyblue}O14	&	\cellcolor{babyblue}O14	&	17	&	33	\\
+			60	&	17	&&	\cellcolor{babyblue}O15	&	\cellcolor{babyblue}O15	&	--	&	--	&	17	&	33	\\
+			61	&	18	&&	\cellcolor{babyblue}O15	&	\cellcolor{babyblue}O15	&	18	&	35	&	17	&	33	\\
+			62	&	18	&&	\cellcolor{babyblue}O15	&	\cellcolor{babyblue}O15	&	18	&	35	&	--	&	--	\\
+			\vdots &\vdots &&\vdots &\vdots &\vdots  &\vdots &\vdots &\vdots \\
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+		
+		\begin{tablenotes}
+			\scriptsize
+			\item[] \sethlcolor{babyblue} \hl{------} = optimized support location
+		\end{tablenotes}
+	\end{threeparttable}	
+	
+	\label{table:optimization2}
+\end{table}   
+
+
+An optimization is performed for each brick placed into the arch (excluding the first two), where $\sum_{n=3}^{n_{max}} 4 \cdot 2n$, is the number of individual analysis models that are needed for the full fabrication (i.e., 2,576 models with $n_{max} = 25$ bricks). It is important to point out that this constitutes a simplification to a cascading optimization, where each cycle is linked to the next as their first and last steps overlap. For example, looking at \Cref{table:optimization2}, Step 11 falls on the last step in O2 and the first step in O3. This means that an exhaustive evaluation would require $(2n)(2(n-1))$ models to run for each of these overlapping steps, resulting in a total $\sum_{n=3}^{n_{max}} 3 \cdot 2n  + (2n)(2(n-1)$  individual analysis models that would need to be run for the full fabrication (i.e., 22,724 models with $n_{max} = 25$ bricks). Even with the simplified modeling approach this is considered an excessive number of analyses to perform. Therefore this overlapping step is treated as pertaining only to one of the optimizations, thereby reducing the order of the problem from $O(n^2)$ to $O(n)$.
+
+The general fabrication process can be described by the four-step loop (a to d) in \Cref{fig:fab_loop}. This loop is repeated over the construction of the whole arch, with the roles of the three robots varying depending on what stage of the construction is being completed. The placement of bricks is sequential, but each robot takes a turn being the optimized support every three bricks, creating the cascading pattern of optimizations as seen in \Cref{table:optimization2}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics [angle=0,trim={0.0cm 0.0cm 0.0cm 0.0cm},clip,width=0.85\linewidth]{fab_loop}
+	\caption{Four-step fabrication loop.}
+	\label{fig:fab_loop}
+\end{figure}       
+
+
+\Cref{fig:3rob_sequence} shows a concrete implementation of this for just one loop starting at step \#59 (the full arch fabrication sequence can be found in Appendix B, \Cref{table:experimental_data3}), where the four-step loop (a to d) is described in detail at each step. In \Cref{fig:3rob_sequence} the optimized location (O15) in step \#59 is calculated for the structure based on the algorithm explained in \Cref{sec:opt_algo}.
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm},clip,width=0.99\linewidth]{3rob_1}
+		\caption{Step 59}
+		\label{fig:3rob_58}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm},clip,width=0.99\linewidth]{3rob_2}
+		\caption{Step 60}
+		\label{fig:3rob_59}
+	\end{subfigure}
+	
+	\vspace{1em}
+	
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm},clip,width=0.99\linewidth]{3rob_3}
+		\caption{Step 61}
+		\label{fig:3rob_60}
+	\end{subfigure}
+	%
+	\begin{subfigure}[b]{0.49\linewidth}
+		\centering
+		\includegraphics [angle=0,trim={0cm 0cm 0cm 0cm},clip,width=0.99\linewidth]{3rob_4}
+		\caption{Step 62}
+		\label{fig:3rob_61}
+	\end{subfigure}
+	
+	
+	\caption{An example four step loop in the 3-robot construction sequence.}
+	\label{fig:3rob_sequence}
+\end{figure}  
+
+
+\subsection{Optimization Results}   \label{sec:optresults}  
+A total of 23 independent optimizations (each corresponding to 4 steps in the sequence) were required in the fabrication simulation of the 25-brick arch based on the \textit{optimized three robot method}. The full set of structural analysis results using these optimized locations are shown in Appendix B, \Cref{table:experimental_data3}. With this method the construction takes a total of 90 steps, which is almost double what is required in a 2-robot method. However, this is due to the re-positioning of the optimized support every four steps. This longer fabrication sequence is partially offset by the fact that waiting for mortar curing is not required as there is always a robot supporting the latest brick in the sequence and there is no cantilevering action.
+
+The \textit{optimized three robot method} is able to significantly improve the structural behavior over the full construction sequence when compared to both 2-robot methods discussed in \Cref{sec:sequential,,sec:cantilever}. \Cref{table:optimization_results} compares the maximum structural forces, moments, and displacements measured during each of the three fabrication sequences. The 3-robot sequence is able to re-distribute the forces in the robotic supports reducing the maximum force in \textit{rob1} and \textit{rob2} by 27\% and 37\% respectively. Twisting behavior is also mitigated, thereby reducing the maximum moment and displacement by 67\% and 93\% respectively when compared to the \textit{sequential method}. The maximum tension in an element is reduced by 23\% when compared to the 2-robot sequences. 
+
+\begin{table}[ht]
+	\normalsize
+	\renewcommand{\arraystretch}{1.2}
+	\centering
+	\caption{Improvement to structural behavior with 3-robot optimized sequence}
+	\vspace{-2.5mm}
+	
+	\begin{threeparttable}
+		\begin{tabular}{c l ccc}
+			\specialrule{.10em}{0.2em}{.2em}
+			%
+			\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+			&\phantom{a}
+			&\multicolumn{1}{c}{\normalsize  Seq.}
+			&\multicolumn{1}{c}{\normalsize Cant.}
+			&\multicolumn{1}{c}{\normalsize 3-rob}
+			\\	
+			%
+			\specialrule{0.06em}{0.2em}{.2em}
+			%
+			\normalsize $F_{rob1}$ &\normalsize $[N]$ &369 &362 &270	\\
+			\normalsize $F_{rob2}$ &\normalsize $[N]$ &406 &409 &257	\\
+			\normalsize $F_{rob3}$ &\normalsize $[N]$ &-- &-- &254	\\
+			\normalsize $M_{sup}$ &\normalsize $[N \cdot m]$ &66.0 &21.7 &21.5	\\
+			\normalsize $T_{max}$ &\normalsize $[N]$ &114.4 &111.5 &87.7	\\
+			\normalsize $\Delta_{max}$ &\normalsize $[10^{-3} \: mm]$ &306.5 &15.9 &21.9	\\
+			\specialrule{0.10em}{0.2em}{.2em}
+			%
+		\end{tabular}
+	\end{threeparttable}	
+	
+	\label{table:optimization_results}
+\end{table}       
+
+
+% ----------------------------------------------------------------------------------------------------
+% 6. Conclusion
+% ---------------------------------------------------------------------------------------------------- 
+\section{Conclusion} \label{conclusion}
+The research presented in this chapter builds on previous research \cite{han_concept_2020,parascho_robotic_2020, parascho_lightvault_2021} that has demonstrated how industrial robots sequenced in a cooperative manner are a viable method for building a discrete brick arch without temporary scaffolding. In the context of fabricating a masonry arch, a minimum of two robots are needed to successfully execute a scaffold-free cooperative placement and support sequence. A simplified geometric structural analysis framework, based on rigid elements and flexible joints, is presented, validated and used to evaluate three fabrication methods: sequential, cantilever, and optimized. While the \textit{sequential method}, where two robots take turns placing bricks, is simple to implement, the out-of-plane twisting observed is detrimental in larger-scale structures. The \textit{cantilever method}, where the robots take turns placing three bricks in a row, solves the issue of twisting. But this method raises questions about applicability to larger masonry structures due to a reliance on the strength of the mortar to support bricks throughout the fabrication.
+
+The addition of a third robot was analyzed to further improve upon the 2-robot scaffold-free fabrication methods. It is shown that including a third robot improves the structural behavior during fabrication when formulating the fabrication sequence as the result of an optimization problem. This approach creates an opportunity to design a fabrication sequence on the basis of a set of user-specified structural optimization targets (e.g., displacements, forces, moments) in addition to the goal of removing the need for temporary scaffolding. Generally, the \textit{optimized three robot method} is an improvement as it combines many positive aspects of the 2-robot methods, while simultaneously mitigating the negative: twisting deformations, tensile forces, and large support moments.
+
+Geometrically complex discrete element systems have significant economic and environmental consequences due to their challenging construction process, which is still deeply rooted in a pre-robotic construction rationale. This work re-imagines the construction of discrete element structures in response to emerging innovations in robotic fabrication in the building industry and thus hopes to bring about transformative sustainable changes in construction practices while increasing onsite productivity. The research presented in this chapter has generated new knowledge on how to design and analyze robotic sequences for spatial structural systems, and illustrates further the potential of utilizing cooperative robotic fabrication for scaffold-free construction applications.
+
+% ----------------------------------------------------------------------------------------------------
+% Bibliography
+% ----------------------------------------------------------------------------------------------------  
+\newpage
+\bibliographystyle{\BiblioPath/elsarticle-num} 
+
+\begingroup
+    \hypersetup{hidelinks} %turns off colors for URL and DOIs
+    \bibliography{\BiblioPath/4LightVault}
+\endgroup

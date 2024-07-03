@@ -1,0 +1,118 @@
+\ProvidesPackage{style/BruunPrinceton}
+
+% School name and location
+\university{Princeton University}
+\universitycity{Princeton}
+\universitystate{New Jersey}
+
+% School color found from university's graphic identity site:
+% http://www.princeton.edu/communications/services/image/graphic/color
+\definecolor{SchoolColor}{rgb}{0.9608, 0.5020, 0.1451} %Princeton Orange
+
+% The "chaptergrey" color is used to set the color of the chapter headings
+% \definecolor{chaptergrey}{rgb}{0.9608, 0.5020, 0.1451} %Princeton Orange
+\definecolor{chaptergrey}{rgb}{0.5019, 0.5019, 0.5019} %Grey Color
+
+
+% Do it all in just one command
+\renewcommand{\frontmatter}{
+    % \maketitle
+    % \copyrightpage
+    % \abstractpage
+    % \acknowledgmentspage
+    % \dedicationpage
+    \setstretch{1.5} %reduce stretch here for aesthetics
+	\tableofcontents
+    \listoffigures
+    \listoftables
+    \newpage %clear to new page to start content
+    \pagenumbering{arabic} %switch pagenumbering to arabic
+}
+
+\renewcommand{\maketitle}{
+	\thispagestyle{empty}
+    %
+    \begin{center}
+        \doublespacing
+        \normalsize
+        %
+    	\vspace*{42pt}
+        \textbf{\thetitle}\\
+    	\vspace{70pt}
+        %
+    	\theauthor\\
+    	\vspace{13pt}
+        %
+        \setstretch{2.1}
+    	A DISSERTATION\\
+    	  PRESENTED TO THE FACULTY\\
+    	  OF PRINCETON UNIVERSITY\\
+    	  IN CANDIDACY FOR THE DEGREE\\
+        OF \@degree\\
+        %
+    	  \vspace{13pt}
+    	  RECOMMENDED FOR ACCEPTANCE BY \\\@department\\
+        \vspace{32pt}
+        %
+    	  Advisors: \@advisor\\
+        \vspace{47pt}
+    	  \@degreemonth\ \@degreeyear
+    	\rm
+	\end{center}
+	\vspace*{\fill}
+}
+
+
+
+\newcommand{\copyrightpage}{
+	\newpage
+	\thispagestyle{empty}
+	\vspace*{25pt}
+    %
+	\begin{center}
+        \normalsize
+        \setstretch{2.0}
+    	\noindent \copyright \  Copyright by \theauthor, \@degreeyear.\\
+        All rights reserved.
+	\end{center}
+	\newpage
+}
+
+
+\newcommand{\abstractpage}{
+	\phantomsection
+	\pagenumbering{roman}
+	\setcounter{page}{3}
+	\addcontentsline{toc}{chapter}{Abstract}
+	\begin{center}
+        Abstract\\
+	\end{center}
+	\@abstracttext
+	\vspace*{\fill}
+	\newpage 
+}
+
+
+\newcommand{\acknowledgmentspage}{
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Acknowledgments}
+	\begin{center}
+        Acknowledgments\\
+	\end{center}
+	\@acknowledgmenttext
+	\vspace*{\fill}
+	\newpage 
+}
+
+
+\newcommand{\dedicationpage}{
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Dedication}
+	\begin{flushright}
+        \topskip0pt
+        \vspace*{\fill}
+        \@dedicationtext\\
+        \vspace*{\fill}
+    \end{flushright} 
+	\newpage 
+}

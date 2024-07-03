@@ -1,0 +1,456 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LIGHTVAULT APPENDIX
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{babyblue}{rgb}{0.54, 0.81, 0.94}
+
+\clearpage
+\chapter{Appendix for Chapter 5}
+
+
+% ----------------------------------------------------------------------------------------------------
+%% ASSEMBLY - SEQUENCE
+% ----------------------------------------------------------------------------------------------------
+\section{Space Frame Arch Design and Assembly} \label{sec:appendixB_space}
+    This appendix presents additional information for the space frame arch structure that was designed in \Cref{sec:4__casestudy} and the cooperative robotic sequence that was used to assemble the structure as discussed in \Cref{sec:6__assembly}.
+    
+    \Cref{table:appendix_realization} summarizes the results from each iteration of the design process, showing the new edges connecting each new vertex to the existing graph and the calculated mapping of this vertex to $\mathbb{R}^3$. \Cref{table:appendix_sequence} summarizes the cooperative robotic fabrication sequence that was used to build the resulting space frame arch. This table shows the member \#, its corresponding edges in the graph representation, and the specific robot (either R1 or R2) that was used to place the member. Each new node is added through one of the following feasible 3-member placement sequences using both robots: R1-R2-R1, R1-R2-R2, R2-R1-R2, or R2-R1-R1. Note that the first 6 members comprise a complete tetrahedral that was added manually as a base to initialize the construction, and are therefore not associated with a robotic placement. 
+
+\newpage
+
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\footnotesize
+	\centering
+	\caption{Vertex mapping to $\mathbb{R}^3$ and graph connectivity at each aggregation phase ($G'$) following an iteration of the design process.}
+	
+	\begin{tabular}{lc rr}
+		\specialrule{.10em}{0.2em}{.2em}
+		\centering
+		%
+		\phantom{a}
+		&\phantom{\makecell{\vspace{0.5em}}}%to space out the top headings nice
+		&\multicolumn{1}{c}{\normalsize{node}}
+		&\multicolumn{1}{c}{\normalsize{added edges}}
+		\\	
+		%
+		[0.8ex]
+		\cmidrule{3-4}
+		%
+		\multicolumn{1}{c}{\normalsize$v$}
+		&\phantom{a}
+		&\multicolumn{1}{c}{\normalsize$n : v \rightarrow \mathbb{R}^3$}
+		&\multicolumn{1}{c}{\normalsize$(u,v) \in G'(E)$}
+		\\
+		\specialrule{0.06em}{0.2em}{.2em}
+		%
+		0 &&$(-0.639,1.730,0.000)$ &-\\
+		1 &&$(-0.529,1.646,0.670)$ &$\{(0,1)\}$\\
+		2 &&$(-0.385,1.927,0.576)$ &$\{(0,2),(1,2)\}$\\
+		3 &&$(-0.211,1.558,0.546)$ &$\{(0,3),(1,3),(2,3)\}$\\
+		4 &&$(-0.177,2.015,1.117)$ &$\{(1,4),(2,4),(3,4)\}$\\
+		5 &&$(-0.188,1.568,1.307)$ &$\{(1,5),(3,5),(4,5)\}$\\
+		6 &&$(0.181,1.390,1.058)$ &$\{(3,6),(4,6),(5,6)\}$\\
+		7 &&$(0.512,2.065,1.539)$ &$\{(4,7),(5,7),(6,7)\}$\\
+		8 &&$(0.512,1.413,1.793)$ &$\{(5,8),(6,8),(7,8)\}$\\
+		9 &&$(0.914,1.754,1.394)$ &$\{(6,9),(7,9),(8,9)\}$\\
+		10 &&$(1.431,1.885,1.655)$ &$\{(7,10),(8,10),(9,10)\}$\\
+		11 &&$(1.487,1.237,1.274)$ &$\{(8,11),(9,11),(10,11)\}$\\
+		12 &&$(1.431,2.050,1.107)$ &$\{(9,12),(10,12),(11,12)\}$\\
+		13 &&$(1.854,1.710,0.812)$ &$\{(10,13),(11,13),(12,13)\}$\\
+		14 &&$(2.211,2.024,0.957)$ &$\{(10,14),(12,14),(13,14)\}$\\
+		15 &&$(2.189,1.444,0.925)$ &$\{(10,15),(13,15),(14,15)\}$\\
+		16 &&$(2.397,1.725,0.000)$ &$\{(13,16),(14,16),(15,16)\}$\\
+		\specialrule{0.10em}{0.2em}{.2em}
+		%
+	\end{tabular}
+	
+	\label{table:appendix_realization}
+\end{table} 
+
+
+\begin{table}[H]
+	\renewcommand{\arraystretch}{0.5}
+	\footnotesize
+	\centering
+    \caption{Cooperative robotic assembly sequence for the space frame arch.}
+    %
+    \begin{tabular}{*{3}{c}}
+    	\specialrule{.10em}{0.2em}{.2em}
+    	\multicolumn{1}{c}{\normalsize{member}}
+    	&\multicolumn{1}{c}{\normalsize{edge}}
+    	&\multicolumn{1}{c}{\normalsize{robot}}
+    	\\
+        \multicolumn{1}{c}{$\#$}
+    	&\multicolumn{1}{c}{$(u,v)$}
+    	&\multicolumn{1}{c}{$\#$}
+    	\\
+    	\specialrule{0.06em}{0.2em}{.2em}
+        		%
+        0&$(0,1)$&-\\
+        1&$(0,2)$&-\\
+        2&$(0,3)$&-\\
+        3&$(2,3)$&-\\
+        4&$(1,3)$&-\\
+        5&$(1,2)$&-\\
+        \cmidrule{1-3}
+        6&$(1,4)$&R2\\
+        7&$(2,4)$&R1\\
+        8&$(3,4)$&R2\\
+        \cmidrule{1-3}
+        9&$(1,5)$&R2\\
+        10&$(4,5)$&R1\\
+        11&$(3,5)$&R2\\
+        \cmidrule{1-3}
+        12&$(3,6)$&R2\\
+        13&$(4,6)$&R1\\
+        14&$(5,6)$&R2\\
+        \cmidrule{1-3}
+        15&$(5,7)$&R2\\
+        16&$(6,7)$&R1\\
+        17&$(4,7)$&R1\\
+        \cmidrule{1-3}
+        18&$(6,8)$&R2\\
+        19&$(7,8)$&R1\\
+        20&$(5,8)$&R1\\
+        \cmidrule{1-3}
+        21&$(7,9)$&R1\\
+        22&$(6,9)$&R2\\
+        23&$(8,9)$&R2\\
+        \cmidrule{1-3}
+        24&$(9,10)$&R2\\
+        25&$(7,10)$&R1\\
+        26&$(8,10)$&R2\\
+        \cmidrule{1-3}
+        27&$(9,11)$&R1\\
+        28&$(8,11)$&R2\\
+        29&$(10,11)$&R2\\
+        \cmidrule{1-3}
+        30&$(10,12)$&R1\\
+        31&$(11,12)$&R2\\
+        32&$(9,12)$&R1\\
+        \cmidrule{1-3}
+        33&$(12,13)$&R1\\
+        34&$(10,13)$&R2\\
+        35&$(11,13)$&R2\\
+        \cmidrule{1-3}
+        36&$(10,14)$&R1\\
+        37&$(13,14)$&R2\\
+        38&$(12,14)$&R1\\
+        \cmidrule{1-3}
+        39&$(10,15)$&R2\\
+        40&$(14,15)$&R1\\
+        41&$(13,15)$&R2\\
+        \cmidrule{1-3}
+        42&$(13,16)$&R2\\
+        43&$(14,16)$&R1\\
+        44&$(15,16)$&R2\\
+    \end{tabular}
+    \label{table:appendix_sequence}
+\end{table}
+
+
+% ----------------------------------------------------------------------------------------------------
+%% STRAIN ENERGY
+% ----------------------------------------------------------------------------------------------------
+\newpage
+\section{Axial Strain Energy in Disassembly} \label{sec:appendixA_space}
+    This appendix presents all the strain energy data that was generated in the process of determining what members to robotically support in each of the four disassembly phases for the space frame arch. The sequence of rigid cells to remove and support was planned in \Cref{sec:5__casestudy} with results of the physical implementation of the disassembly sequence shown in \Cref{sec:6__disassembly}.
+    
+    Each table summarizes the average axial strain energy ($10^{-9} \ kN\cdot m$) per member in the structure, for each disassembly step in a specific disassembly phase, for every possible combination of supported members. There are 7 distinct disassembly steps in a typical phase (i.e., 7 entries per table cell). These 7 steps corresponds to: first supporting the structure with two robots, and then manually removing the 6 intermediate members, $E_{remove}$, one-by-one. The structure is analyzed, and the average strain energy is recorded after the simulation of each of these 7 steps.
+    
+    There are $36$ unique combinations of members for the two robots (R1 and R2) to support in each phase because there are 6 potential members to support in either of the chosen rigid cells, $C_{remove}$ and $C_{support}$. The horizontal and vertical axes of each table show the member \# , and corresponding graph edge, representing a potential member to support in each cell. The combination of support members representing the lowest average axial strain over all 7 steps is highlighted in the table for each phase. These members were then chosen to be supported in the physical implementation of the disassembly sequence shown in \Cref{sec:6__disassembly}. The final phase only requires one robot supporting the structure and the removal of 3 members connecting the final cell to the foundation, hence there are only 4 steps and 6 unique support combinations possible.
+
+
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\footnotesize
+	\centering
+	\caption{Average axial strain energy ($10^{-9} \ kN\cdot m$) in disassembly phase 1.}
+	\vspace{-2.5mm}
+    %
+    \begin{tabular}{m{0.06cm}m{1cm}*{6}{|m{1.10cm}}}
+    	\specialrule{.10em}{0.2em}{.2em}
+    	\multicolumn{2}{c|}{\multirow{2}{*}{\diagbox{R2}{R1}}}
+    	&\multicolumn{1}{c}{$24$}
+    	&\multicolumn{1}{c}{$27$}
+    	&\multicolumn{1}{c}{$29$}
+    	&\multicolumn{1}{c}{$30$}
+    	&\multicolumn{1}{c}{$31$}
+    	&\multicolumn{1}{c}{$32$}
+    	\\
+    	&
+    	&\multicolumn{1}{c}{$(9,10)$}
+    	&\multicolumn{1}{c}{$(9,11)$}
+    	&\multicolumn{1}{c}{$(10,11)$}
+    	&\multicolumn{1}{c}{$(10,12)$}
+    	&\multicolumn{1}{c}{$(11,12)$}
+    	&\multicolumn{1}{c}{$(9,12)$}
+    	\\
+    	\specialrule{0.06em}{0.2em}{.2em}
+        		%
+\multicolumn{2}{c|}{\makecell[cc]{39\\(13,15)}}
+&\scriptsize{\makecell[br]{\\7.89\\8.05\\8.23\\8.36\\8.54\\8.65\\38.64}}
+&\scriptsize{\makecell[br]{\\8.40\\8.48\\9.91\\10.57\\11.89\\12.19\\12.50}}
+&\scriptsize{\makecell[br]{\\9.20\\9.55\\9.77\\10.16\\11.63\\11.93\\12.23}}
+&\scriptsize{\makecell[br]{\\9.41\\9.62\\9.84\\10.03\\10.27\\11.55\\22.81}}
+&\scriptsize{\makecell[br]{\\8.98\\9.15\\9.33\\9.50\\9.73\\9.98\\10.23}}
+&\scriptsize{\makecell[br]{\\9.46\\9.54\\11.80\\12.03\\12.32\\12.68\\16.01}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{40\\(13,14)}}
+&\scriptsize{\makecell[br]{\\7.86\\8.04\\8.22\\8.40\\8.58\\8.63\\38.61}}
+&\scriptsize{\makecell[br]{\\8.09\\8.35\\9.47\\10.57\\11.89\\12.16\\12.47}}
+&\scriptsize{\makecell[br]{\\9.09\\9.30\\9.52\\10.17\\11.64\\11.90\\12.21}}
+&\scriptsize{\makecell[br]{\\9.74\\9.96\\10.19\\10.43\\10.69\\11.53\\22.78}}
+&\scriptsize{\makecell[br]{\\8.94\\9.10\\9.29\\9.51\\9.74\\9.95\\10.21}}
+&\scriptsize{\makecell[br]{\\9.30\\9.48\\11.88\\12.16\\12.46\\12.65\\15.98}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{41\\(14,15)}}
+&\scriptsize{\makecell[br]{\\8.06\\8.24\\8.54\\8.70\\8.98\\9.29\\38.60}}
+&\scriptsize{\makecell[br]{\\8.70\\9.55\\10.16\\11.06\\11.84\\12.13\\12.46}}
+&\scriptsize{\makecell[br]{\\9.11\\9.32\\9.59\\10.56\\11.58\\11.87\\12.19}}
+&\scriptsize{\makecell[br]{\\9.53\\9.74\\10.04\\10.27\\10.56\\13.21\\22.77}}
+&\scriptsize\cellcolor{babyblue}{\makecell[br]{\\8.95\\9.10\\9.23\\9.45\\9.68\\9.93\\10.20}}
+&\scriptsize{\makecell[br]{\\11.34\\11.80\\13.44\\13.76\\14.27\\13.95\\15.97}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{42\\(13,16)}}
+&\scriptsize{\makecell[br]{\\8.08\\8.24\\8.43\\8.56\\8.74\\8.80\\38.78}}
+&\scriptsize{\makecell[br]{\\8.60\\8.64\\10.26\\10.75\\12.08\\12.33\\12.65}}
+&\scriptsize{\makecell[br]{\\9.49\\9.84\\10.07\\10.35\\11.82\\12.07\\12.38}}
+&\scriptsize{\makecell[br]{\\10.13\\10.40\\10.64\\11.13\\11.40\\11.70\\22.95}}
+&\scriptsize{\makecell[br]{\\9.12\\9.28\\9.47\\9.69\\9.92\\10.12\\10.38}}
+&\scriptsize{\makecell[br]{\\9.57\\9.67\\12.18\\13.08\\13.40\\12.82\\16.16}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{43\\(15,16)}}
+&\scriptsize{\makecell[br]{\\8.31\\8.46\\8.79\\8.99\\9.25\\9.62\\38.74}}
+&\scriptsize{\makecell[br]{\\10.14\\11.62\\12.93\\12.84\\12.77\\13.09\\12.60}}
+&\scriptsize{\makecell[br]{\\9.44\\9.77\\10.08\\12.21\\12.52\\12.83\\12.34}}
+&\scriptsize{\makecell[br]{\\9.77\\9.97\\10.28\\10.49\\10.97\\15.47\\22.91}}
+&\scriptsize{\makecell[br]{\\9.39\\9.46\\9.59\\9.98\\10.62\\10.88\\10.34}}
+&\scriptsize{\makecell[br]{\\11.89\\12.01\\13.68\\14.85\\15.29\\14.50\\16.11}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{44\\(14,16)}}
+&\scriptsize{\makecell[br]{\\8.66\\8.86\\9.14\\9.36\\9.55\\65.77\\38.75}}
+&\scriptsize{\makecell[br]{\\8.86\\9.71\\10.35\\11.22\\12.16\\12.49\\12.61}}
+&\scriptsize{\makecell[br]{\\9.34\\9.55\\9.81\\10.72\\11.90\\12.23\\12.35}}
+&\scriptsize{\makecell[br]{\\10.23\\10.46\\10.81\\11.07\\11.38\\33.63\\22.92}}
+&\scriptsize{\makecell[br]{\\9.29\\9.44\\9.56\\9.79\\10.00\\10.29\\10.35}}
+&\scriptsize{\makecell[br]{\\12.74\\13.36\\15.78\\16.15\\16.99\\22.28\\16.12}}
+\\
+    \end{tabular}
+\end{table}
+%
+\newpage
+%
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\footnotesize
+	\centering
+	\caption{Average axial strain energy ($10^{-9} \ kN\cdot m$) in disassembly phase 2.}
+	\vspace{-2.5mm}
+    %
+    %
+    \begin{tabular}{m{0.05cm}m{1cm}*{6}{|m{0.80cm}}}
+        \specialrule{.10em}{0.2em}{.2em}
+        \multicolumn{2}{c|}{\multirow{2}{*}{\diagbox{R2}{R1}}}
+        &\multicolumn{1}{c}{$14$}
+        &\multicolumn{1}{c}{$15$}
+        &\multicolumn{1}{c}{$16$}
+        &\multicolumn{1}{c}{$18$}
+        &\multicolumn{1}{c}{$19$}
+        &\multicolumn{1}{c}{$20$}
+        \\
+        &
+        &\multicolumn{1}{c}{$(5,6)$}
+        &\multicolumn{1}{c}{$(5,7)$}
+        &\multicolumn{1}{c}{$(6,7)$}
+        &\multicolumn{1}{c}{$(6,8)$}
+        &\multicolumn{1}{c}{$(7,8)$}
+        &\multicolumn{1}{c}{$(5,8)$}
+        \\
+        \specialrule{0.06em}{0.2em}{.2em}
+        		%
+\multicolumn{2}{c|}{\makecell[cc]{24\\(9,10)}}
+&\scriptsize{\makecell[br]{\\4.68\\3.30\\3.48\\3.31\\7.99\\7.95\\8.25}}
+&\scriptsize{\makecell[br]{\\5.46\\2.91\\2.86\\2.96\\3.99\\4.14\\4.22}}
+&\scriptsize{\makecell[br]{\\6.63\\4.93\\5.04\\5.21\\5.33\\5.52\\5.73}}
+&\scriptsize{\makecell[br]{\\5.70\\4.87\\5.02\\5.25\\5.43\\37.53\\38.92}}
+&\scriptsize{\makecell[br]{\\7.67\\6.89\\7.11\\7.35\\7.60\\7.88\\10.07}}
+&\scriptsize{\makecell[br]{\\3.85\\2.95\\3.05\\3.00\\3.11\\5.70\\13.09}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{27\\(9,11)}}
+&\scriptsize{\makecell[br]{\\9.86\\10.17\\219.87\\2.84\\7.50\\7.45\\7.72}}
+&\scriptsize{\makecell[br]{\\7.22\\8.38\\184.75\\2.49\\3.51\\3.63\\3.70}}
+&\scriptsize{\makecell[br]{\\8.94\\9.73\\186.93\\4.73\\4.85\\5.02\\5.20}}
+&\scriptsize{\makecell[br]{\\8.25\\8.51\\256.24\\4.78\\4.94\\37.03\\38.40}}
+&\scriptsize{\makecell[br]{\\10.32\\10.65\\189.00\\6.88\\7.12\\7.37\\9.55}}
+&\scriptsize{\makecell[br]{\\6.57\\6.78\\219.19\\2.53\\2.62\\5.19\\12.56}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{29\\(10,11)}}
+&\scriptsize{\makecell[br]{\\5.68\\5.76\\18.24\\17.05\\23.99\\24.69\\8.02}}
+&\scriptsize{\makecell[br]{\\3.37\\4.69\\6.88\\7.11\\10.93\\25.90\\3.99}}
+&\scriptsize{\makecell[br]{\\5.20\\5.57\\6.25\\6.45\\11.93\\22.26\\5.50}}
+&\scriptsize{\makecell[br]{\\4.98\\5.14\\5.31\\6.02\\34.71\\54.27\\38.70}}
+&\scriptsize{\makecell[br]{\\6.59\\6.80\\7.02\\7.25\\20.78\\57.00\\9.84}}
+&\scriptsize{\makecell[br]{\\3.48\\3.58\\3.70\\3.68\\22.16\\31.22\\12.86}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{30\\(10,12)}}
+&\scriptsize{\makecell[br]{\\4.75\\5.09\\5.94\\5.85\\9.21\\8.93\\8.69}}
+&\scriptsize{\makecell[br]{\\4.32\\4.05\\4.15\\4.29\\4.69\\6.27\\4.66}}
+&\scriptsize{\makecell[br]{\\5.81\\5.57\\5.62\\5.81\\5.88\\6.51\\6.17}}
+&\scriptsize{\makecell[br]{\\5.43\\6.13\\6.33\\23.18\\24.19\\38.52\\39.37}}
+&\scriptsize{\makecell[br]{\\7.13\\7.18\\7.41\\7.66\\8.10\\8.36\\10.51}}
+&\scriptsize{\makecell[br]{\\3.98\\5.60\\5.78\\15.27\\15.50\\23.91\\13.53}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{31\\(11,12)}}
+&\scriptsize{\makecell[br]{\\4.39\\4.47\\5.45\\5.31\\8.41\\8.14\\7.97}}
+&\scriptsize\cellcolor{babyblue}{\makecell[br]{\\3.29\\3.86\\4.10\\5.16\\5.28\\5.33\\3.94}}
+&\scriptsize{\makecell[br]{\\5.10\\5.23\\5.25\\5.57\\5.60\\5.71\\5.45}}
+&\scriptsize{\makecell[br]{\\5.01\\5.17\\5.31\\6.03\\6.51\\37.72\\38.65}}
+&\scriptsize{\makecell[br]{\\6.46\\6.66\\6.86\\7.12\\7.50\\7.78\\9.79}}
+&\scriptsize{\makecell[br]{\\3.72\\3.84\\3.96\\4.98\\5.77\\22.96\\12.81}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{32\\(9,12)}}
+&\scriptsize{\makecell[br]{\\8.70\\7.84\\8.59\\3.09\\7.76\\7.71\\8.00}}
+&\scriptsize{\makecell[br]{\\8.02\\6.95\\7.35\\2.74\\3.76\\3.90\\3.97}}
+&\scriptsize{\makecell[br]{\\9.80\\9.25\\9.53\\4.98\\5.10\\5.29\\5.48}}
+&\scriptsize{\makecell[br]{\\12.68\\12.41\\13.34\\5.03\\5.20\\37.30\\38.68}}
+&\scriptsize{\makecell[br]{\\11.07\\10.80\\11.60\\7.13\\7.37\\7.64\\9.82}}
+&\scriptsize{\makecell[br]{\\8.24\\7.83\\8.57\\2.78\\2.88\\5.46\\12.84}}
+\\
+    \end{tabular}
+\end{table}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+
+
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\footnotesize
+	\centering
+	\caption{Average axial strain energy ($10^{-9} \ kN\cdot m$) in disassembly phase 3.}
+	\vspace{-2.5mm}
+    %
+    \begin{tabular}{m{0.05cm}m{0.05cm}*{6}{|m{0.80cm}}}
+    	\specialrule{.10em}{0.2em}{.2em}
+    	\multicolumn{2}{c|}{\multirow{2}{*}{\diagbox{R2}{R1}}}
+    	&\multicolumn{1}{c}{$3$}
+    	&\multicolumn{1}{c}{$4$}
+    	&\multicolumn{1}{c}{$5$}
+    	&\multicolumn{1}{c}{$6$}
+    	&\multicolumn{1}{c}{$7$}
+    	&\multicolumn{1}{c}{$8$}
+    	\\
+    	&
+    	&\multicolumn{1}{c}{$(2,3)$}
+    	&\multicolumn{1}{c}{$(1,3)$}
+    	&\multicolumn{1}{c}{$(1,2)$}
+    	&\multicolumn{1}{c}{$(1,4)$}
+    	&\multicolumn{1}{c}{$(2,4)$}
+    	&\multicolumn{1}{c}{$(3,4)$}
+    	\\
+    	\specialrule{0.06em}{0.2em}{.2em}
+        		%
+\multicolumn{2}{c|}{\makecell[cc]{14\\(5,6)}}
+&\scriptsize{\makecell[br]{\\7.00\\1.73\\1.84\\2.24\\2.37\\2.50\\2.67}}
+&\scriptsize{\makecell[br]{\\7.11\\1.92\\2.03\\3.39\\3.59\\3.81\\4.06}}
+&\scriptsize{\makecell[br]{\\6.63\\1.84\\2.22\\2.48\\2.69\\2.85\\3.38}}
+&\scriptsize{\makecell[br]{\\5.68\\1.62\\1.71\\1.80\\1.90\\2.02\\2.22}}
+&\scriptsize{\makecell[br]{\\6.29\\2.27\\2.39\\2.52\\2.56\\2.64\\15.01}}
+&\scriptsize{\makecell[br]{\\5.92\\1.88\\1.98\\2.09\\2.21\\2.48\\2.64}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{15\\(5,7)}}
+&\scriptsize{\makecell[br]{\\2.53\\2.61\\2.75\\3.19\\1.53\\1.62\\1.72}}
+&\scriptsize{\makecell[br]{\\2.73\\2.79\\2.94\\4.34\\2.75\\2.92\\3.11}}
+&\scriptsize{\makecell[br]{\\3.54\\3.65\\5.02\\5.26\\1.85\\1.96\\2.43}}
+&\scriptsize{\makecell[br]{\\3.33\\3.50\\3.94\\4.16\\1.07\\1.13\\1.27}}
+&\scriptsize{\makecell[br]{\\3.38\\3.55\\3.85\\4.06\\1.73\\1.75\\14.06}}
+&\scriptsize{\makecell[br]{\\2.65\\2.79\\2.89\\3.05\\1.38\\1.59\\1.69}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{16\\(6,7)}}
+&\scriptsize{\makecell[br]{\\1.66\\1.66\\1.65\\1.79\\1.90\\1.97\\2.32}}
+&\scriptsize{\makecell[br]{\\2.04\\2.00\\1.96\\2.93\\3.10\\3.28\\3.71}}
+&\scriptsize{\makecell[br]{\\1.98\\2.04\\2.25\\2.27\\2.59\\3.30\\3.02}}
+&\scriptsize\cellcolor{babyblue}{\makecell[br]{\\1.27\\1.33\\1.40\\1.48\\1.61\\1.90\\1.87}}
+&\scriptsize{\makecell[br]{\\2.45\\2.57\\2.71\\3.00\\2.99\\23.31\\14.66}}
+&\scriptsize{\makecell[br]{\\1.52\\1.59\\1.67\\1.79\\1.90\\1.95\\2.29}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{18\\(6,8)}}
+&\scriptsize{\makecell[br]{\\4.56\\4.56\\4.75\\16.96\\17.96\\18.79\\2.34}}
+&\scriptsize{\makecell[br]{\\5.36\\6.13\\7.71\\17.96\\19.01\\20.09\\3.73}}
+&\scriptsize{\makecell[br]{\\5.01\\4.97\\4.97\\22.42\\26.97\\33.16\\3.05}}
+&\scriptsize{\makecell[br]{\\2.11\\1.90\\2.00\\20.30\\23.57\\27.80\\1.89}}
+&\scriptsize{\makecell[br]{\\3.30\\3.13\\3.29\\34.22\\35.91\\142.06\\14.68}}
+&\scriptsize{\makecell[br]{\\2.35\\2.14\\2.25\\17.15\\18.15\\18.76\\2.31}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{19\\(7,8)}}
+&\scriptsize{\makecell[br]{\\1.87\\1.93\\1.82\\2.13\\2.12\\2.13\\1.35}}
+&\scriptsize{\makecell[br]{\\2.00\\2.03\\1.89\\3.25\\3.30\\3.44\\2.74}}
+&\scriptsize{\makecell[br]{\\3.46\\3.80\\4.09\\4.23\\4.69\\5.72\\2.05}}
+&\scriptsize{\makecell[br]{\\2.59\\2.72\\2.72\\2.87\\2.96\\3.48\\0.90}}
+&\scriptsize{\makecell[br]{\\5.81\\6.10\\7.40\\8.03\\8.13\\60.95\\13.69}}
+&\scriptsize{\makecell[br]{\\1.92\\2.01\\2.11\\2.17\\2.17\\2.11\\1.32}}
+\\\cmidrule{1-8}\\[-1.3em]
+\multicolumn{2}{c|}{\makecell[cc]{20\\(5,8)}}
+&\scriptsize{\makecell[br]{\\6.97\\7.64\\27.25\\29.05\\2.42\\2.56\\2.73}}
+&\scriptsize{\makecell[br]{\\7.24\\7.56\\27.44\\30.21\\3.64\\3.86\\4.12}}
+&\scriptsize{\makecell[br]{\\8.60\\9.92\\29.36\\31.61\\2.74\\2.91\\3.43}}
+&\scriptsize{\makecell[br]{\\4.34\\3.70\\30.86\\32.58\\1.96\\2.08\\2.28}}
+&\scriptsize{\makecell[br]{\\4.68\\4.08\\33.28\\35.13\\2.61\\2.70\\15.07}}
+&\scriptsize{\makecell[br]{\\4.25\\3.64\\27.39\\28.91\\2.26\\2.53\\2.70}}
+\\
+    \end{tabular}
+\end{table}
+%
+\newpage
+%
+\begin{table}[ht]
+	\renewcommand{\arraystretch}{1.0}
+	\footnotesize
+	\centering
+	\caption{Average axial strain energy ($10^{-9} \ kN\cdot m$) in disassembly phase 4.}
+	\vspace{-2.5mm}
+    %
+    \begin{tabular}{m{0.05cm}m{0.05cm}*{6}{|m{0.7cm}}}
+    	\specialrule{.10em}{0.2em}{.2em}
+    	\multicolumn{2}{c|}{\multirow{2}{*}{\diagbox{-}{R1}}}
+    	&\multicolumn{1}{c}{$3$}
+    	&\multicolumn{1}{c}{$4$}
+    	&\multicolumn{1}{c}{$5$}
+    	&\multicolumn{1}{c}{$6$}
+    	&\multicolumn{1}{c}{$7$}
+    	&\multicolumn{1}{c}{$8$}
+    	\\
+    	&
+    	&\multicolumn{1}{c}{$(2,3)$}
+    	&\multicolumn{1}{c}{$(1,3)$}
+    	&\multicolumn{1}{c}{$(1,2)$}
+    	&\multicolumn{1}{c}{$(1,4)$}
+    	&\multicolumn{1}{c}{$(2,4)$}
+    	&\multicolumn{1}{c}{$(3,4)$}
+    	\\
+    	\specialrule{0.06em}{0.2em}{.2em}
+        		%
+\multicolumn{2}{c|}{\makecell[cc]{-}}
+&\scriptsize{\makecell[br]{\\1.31\\1.57\\1.79\\2.09}}
+&\scriptsize{\makecell[br]{\\3.73\\4.20\\0.88\\1.02}}
+&\scriptsize{\makecell[br]{\\2.59\\2.91\\3.32\\1.49}}
+&\scriptsize\cellcolor{babyblue}{\makecell[br]{\\0.66\\0.74\\0.93\\1.13}}
+&\scriptsize{\makecell[br]{\\21.98\\31.44\\35.93\\1.88}}
+&\scriptsize{\makecell[br]{\\1.36\\39.18\\0.96\\1.12}}
+\\
+    \end{tabular}
+\end{table}
+
+
+

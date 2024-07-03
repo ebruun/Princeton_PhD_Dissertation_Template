@@ -1,0 +1,65 @@
+% ==============================================================
+% User-defined commands and document settings
+% ==============================================================
+% Passing the school variable in Documentclass in main.tex
+\DeclareStringOption{School}[]
+\ProcessKeyvalOptions*
+\RequirePackage{style/BruunPrinceton}
+
+\setcounter{tocdepth}{1}                        %set the depth of the TOC
+\renewcommand{\cftchapfont}{\normalsize}        %This is to unbold the chapter title text in TOC
+\setlength{\cftbeforechapskip}{10pt}            %TOC skip, for chapters
+\setlength{\cftbeforesecskip}{0pt}              %TOC skip, for sections
+\setlength{\cftbeforesubsecskip}{0pt}           %TOC skip, for subsections
+
+\renewcommand\listfigurename{List of Figures}   %Change the name of figures list
+\renewcommand\listtablename{List of Tables}     %Change the name of tables list
+\setlength{\cftbeforefigskip}{3pt}              %LOF spacing between entries.
+
+%unfortunately couldn't find a way to control the space between the chapters in LoF and LoT, default 10p added as per book class
+%https://mirror.las.iastate.edu/tex-archive/macros/latex/base/classes.pdf (search \addtocontents)
+%was trying this, but was not working...maybe some conflicts with hyperref (see .log file for "failed" status)
+
+% \makeatletter
+%     \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{\addtocontents{lof}{\protect\addvspace{100\p@}}}{\typeout{Patching SUCCESS}}{\typeout{Patching FAILED}}
+%     \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{\addtocontents{lot}{\protect\addvspace{100\p@}}}{\typeout{Patching SUCCESS}}{\typeout{Patching FAILED}}
+% \makeatother
+
+\renewcommand\bibname{References}               %Change the name of references list
+\renewcommand{\href}[2]{#2}                     %titles in the bibliography are not hyperlinks if URL given
+\renewcommand\UrlFont{\normalfont}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}    %use symbols in footnote
+
+\renewcommand{\chapterheadstartvskip}{\vspace*{-1\baselineskip}} %move the chapters titles up the page
+
+
+% \linenumbers
+% \renewcommand{\linenumberfont}{\normalfont\centering\tiny\color{red}} %change for line number format
+
+\setlength{\headheight}{15pt}   %Setting the header height inside the top margin
+\pagestyle{plain}               %plain = just a page number at bottom
+
+\RaggedRight                    %all text raggedright
+\parindent 12pt                 %indent new paragraph by this amount
+
+\urlstyle{same}                 %set the style of urls, same = use same as current font
+
+\widowpenalty=300               %penalty to widow
+\clubpenalty=300                %control page breaking in the initial lines of a paragraph
+
+\hbadness=10000                  %suppress the underfull warnings
+
+% \doublespacing                  %text spacing
+\setstretch{2.0}                %default text spacing, \doublespacing is actually less than 2.0
+
+\emergencystretch 3em           %extra space can be added to a line to avoid overfull horizontal boxes 
+
+\setmainfont{Times New Roman}[]   %Using fontspec to set main font in the document
+    
+\algrenewcommand\alglinenumber[1]{\scriptsize #1:} %change size of the line numbers in algorithm
+
+\renewcommand{\floatpagefraction}{0.99} %maximum fraction of a page that can be occupied by floats
+\renewcommand{\topfraction}{0.99}
+\renewcommand{\bottomfraction}{0.99}
+
