@@ -13,3 +13,5 @@ The original template was writtent to be multi-purpose and to allow a user to sw
 5. Profit...
 
 ## Information about include versus input: https://tex.stackexchange.com/questions/246/when-should-i-use-input-vs-include
+
+The reduced PDF as an example of the generated document is not updated with the final changes made to the template. Roman numerals were switched to arabic for the abtract onwards. Minor change, but I'm just noting for consistency.
